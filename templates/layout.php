@@ -82,7 +82,7 @@ $currentSlug = $page['slug'] ?? '';
             [ Login ▾ ]
             <div class="cyber-user-menu" style="min-width:220px;padding:.75rem">
                 <?php if (!empty($_GET['login_error'])): ?>
-                <div style="font-family:var(--mono);font-size:.65rem;color:#f87171;padding:.25rem .5rem .75rem;border-bottom:1px solid var(--border);margin-bottom:.5rem">
+                <div style="font-family:var(--mono);font-size:.8rem;color:#f87171;padding:.25rem .5rem .75rem;border-bottom:1px solid var(--border);margin-bottom:.5rem">
                     // AUTH FAILED
                 </div>
                 <?php endif ?>
@@ -91,15 +91,15 @@ $currentSlug = $page['slug'] ?? '';
                     <input type="hidden" name="redirect" value="<?= htmlspecialchars($_SERVER['REQUEST_URI'] ?? '/') ?>">
                     <input type="email" name="login" placeholder="E-MAIL"
                            autocomplete="username" required
-                           style="background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:.65rem;padding:.4rem .6rem;letter-spacing:.08em;width:100%">
+                           style="background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:.85rem;padding:.4rem .6rem;letter-spacing:.05em;width:100%">
                     <input type="password" name="password" placeholder="PASSWORD"
                            autocomplete="current-password" required
-                           style="background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:.65rem;padding:.4rem .6rem;letter-spacing:.08em;width:100%">
+                           style="background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:.85rem;padding:.4rem .6rem;letter-spacing:.05em;width:100%">
                     <button type="submit" class="cyber-btn" style="text-align:center;cursor:pointer;background:none">
                         // LOGIN
                     </button>
                 </form>
-                <a href="/admin/forgot-password" style="display:block;text-align:center;padding:.25rem;font-family:var(--mono);font-size:.6rem;color:var(--muted);text-decoration:none">
+                <a href="/admin/forgot-password" style="display:block;text-align:center;padding:.25rem;font-family:var(--mono);font-size:.8rem;color:var(--muted);text-decoration:none">
                     forgot password
                 </a>
             </div>
@@ -158,7 +158,7 @@ $currentSlug = $page['slug'] ?? '';
             <?php endif ?>
             <?php foreach ($group['links'] as $link): ?>
             <?php if ($link['type'] === 'header'): ?>
-            <div style="font-family:var(--mono);font-size:.6rem;color:var(--muted);letter-spacing:.08em;margin-bottom:.2rem">
+            <div style="font-family:var(--mono);font-size:.8rem;color:var(--muted);letter-spacing:.05em;margin-bottom:.2rem">
                 <?= htmlspecialchars($link['label']) ?>
             </div>
             <?php else: ?>
