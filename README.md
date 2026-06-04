@@ -19,9 +19,7 @@ esse-cyber/
 │   ├── css/
 │   │   └── esse-cyber.css      # Gesamtes Stylesheet
 │   └── fonts/
-│       ├── rajdhani-300.woff2
-│       ├── rajdhani-500.woff2
-│       ├── rajdhani-700.woff2
+│       ├── rajdhani-400.woff2
 │       └── share-tech-mono.woff2
 ├── templates/
 │   ├── layout.php              # Standard-Seiten-Layout
@@ -37,7 +35,7 @@ esse-cyber/
 ```json
 {
     "name": "esse-cyber",
-    "version": "1.0.0",
+    "version": "0.3.0",
     "description": "Cyberpunk terminal theme with scanlines, grid background and orange accent.",
     "author": "ESSE CMS",
     "class": "EsseCyber\\Theme",
@@ -71,7 +69,7 @@ Alle Farben und Schriften sind über Custom Properties definiert und können in 
 | `--accent`  | `#e8640a`                  | Akzentfarbe (Orange)             |
 | `--accent2` | `#ff9d45`                  | Hover-Akzent (helleres Orange)   |
 | `--text`    | `#e8e6e0`                  | Fließtext                        |
-| `--muted`   | `#6b6b78`                  | Sekundärer Text, Metadaten       |
+| `--muted`   | `#9a9aa8`                  | Sekundärer Text, Metadaten       |
 | `--mono`    | `'Share Tech Mono', monospace` | Monospace-Schrift (UI-Labels) |
 | `--head`    | `'Rajdhani', sans-serif`   | Überschriften & Fließtext        |
 
@@ -81,7 +79,7 @@ Alle Schriften werden lokal aus `assets/fonts/` geladen, kein CDN erforderlich.
 
 | Schriftart       | Gewichte    | Verwendung           |
 |------------------|-------------|----------------------|
-| Rajdhani         | 300 500 700 | Überschriften, Text  |
+| Rajdhani         | 400         | Überschriften, Text; Fettungen werden per CSS synthetisiert |
 | Share Tech Mono  | 400         | UI-Labels, Code      |
 
 ## Templates
@@ -134,7 +132,7 @@ Erwartet: `$page['error_code']`, `$page['error_title']`, `$page['error_message']
 </div>
 ```
 
-Das Dropdown öffnet sich per CSS-`:hover` ohne JavaScript.
+Das Dropdown öffnet sich per CSS-`:hover` und `:focus-within` ohne JavaScript.
 
 ### User-Menu
 
@@ -143,7 +141,7 @@ Das Dropdown öffnet sich per CSS-`:hover` ohne JavaScript.
 .cyber-user-menu    Dropdown (sichtbar wenn .open gesetzt)
 ```
 
-Das Menü öffnet und schließt sich per JavaScript-Click auf `#cyber-user-toggle`. Klicks außerhalb schließen es.
+Das Menü öffnet und schließt sich per Click oder Tastatur (`Enter`/Leertaste) auf `#cyber-user-toggle`. Klicks außerhalb schließen es.
 
 ### Hintergrund-Effekte
 
@@ -178,6 +176,7 @@ Formatiert CMS-Content automatisch:
 ```
 .cyber-footer       Fixierter Footer unten
 .cyber-clock        Live-Uhr (#cyber-clock, per JS aktualisiert)
+.cyber-footer-menu  Rechts verankerte Footer-Menügruppen im HUD-Balken
 .cyber-footer-link  Einzel-Link im Footer-Menü
 ```
 
@@ -229,7 +228,14 @@ Bootstrap 5 wird global eingebunden. Innerhalb von `.cyber-content-wrap` werden 
 .cyber-content-wrap .container-fluid { padding-left: 0; padding-right: 0; max-width: 100%; }
 ```
 
-Links innerhalb von `.cyber-content-wrap` werden auf die Akzentfarbe umgefärbt.
+Links innerhalb von `.cyber-content-wrap` werden auf die Akzentfarbe umgefärbt und unterstrichen. Bootstrap-Komponenten, die von Plugins in den Content gerendert werden, erhalten dunkle Theme-Overrides:
+
+```css
+.cyber-content-wrap .card,
+.cyber-content-wrap .list-group-item,
+.cyber-content-wrap .alert,
+.cyber-content-wrap .form-control { ... }
+```
 
 ## Theme.php — Boot-Prozess
 

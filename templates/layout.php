@@ -8,6 +8,7 @@
  * @var \EsseCyber\Theme  $theme
  */
 $currentSlug = $page['slug'] ?? '';
+$loginFailed = !empty($_GET['login_error']);
 ?>
 <!DOCTYPE html>
 <html lang="de">
@@ -64,7 +65,7 @@ $currentSlug = $page['slug'] ?? '';
 
     <div style="display:flex;align-items:center;gap:1rem">
         <?php if (\Esse\Auth::check()): ?>
-        <div class="cyber-user" id="cyber-user-toggle" onclick="event.stopPropagation();this.classList.toggle('open')" style="user-select:none">
+        <div class="cyber-user" id="cyber-user-toggle" tabindex="0" onclick="event.stopPropagation();this.classList.toggle('open')" style="user-select:none">
             [ <?= htmlspecialchars(\Esse\Auth::user()['display_name'] ?? '') ?> ▾ ]
             <div class="cyber-user-menu">
                 <a href="/profil">// Profil</a>
@@ -78,15 +79,15 @@ $currentSlug = $page['slug'] ?? '';
             </div>
         </div>
         <?php else: ?>
-        <div class="cyber-user" id="cyber-user-toggle" onclick="event.stopPropagation();this.classList.toggle('open')" style="user-select:none">
+        <div class="cyber-user <?= $loginFailed ? 'open' : '' ?>" id="cyber-user-toggle" tabindex="0" onclick="event.stopPropagation();this.classList.toggle('open')" style="user-select:none">
             [ Login ▾ ]
             <div class="cyber-user-menu" style="min-width:220px;padding:.75rem">
-                <?php if (!empty($_GET['login_error'])): ?>
+                <?php if ($loginFailed): ?>
                 <div style="font-family:var(--mono);font-size:.8rem;color:#f87171;padding:.25rem .5rem .75rem;border-bottom:1px solid var(--border);margin-bottom:.5rem">
                     // AUTH FAILED
                 </div>
                 <?php endif ?>
-                <form method="post" action="/admin/login" style="display:flex;flex-direction:column;gap:.5rem;padding:.25rem">
+                <form id="navbar-login-form" method="post" action="/admin/login" style="display:flex;flex-direction:column;gap:.5rem;padding:.25rem">
                     <input type="hidden" name="_csrf"    value="<?= \Esse\Auth::csrfToken() ?>">
                     <input type="hidden" name="redirect" value="<?= htmlspecialchars($_SERVER['REQUEST_URI'] ?? '/') ?>">
                     <input type="email" name="login" placeholder="E-MAIL"
@@ -94,6 +95,7 @@ $currentSlug = $page['slug'] ?? '';
                            style="background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:.85rem;padding:.4rem .6rem;letter-spacing:.05em;width:100%">
                     <input type="password" name="password" placeholder="PASSWORD"
                            autocomplete="current-password" required
+                           <?= $loginFailed ? 'autofocus' : '' ?>
                            style="background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:.85rem;padding:.4rem .6rem;letter-spacing:.05em;width:100%">
                     <button type="submit" class="cyber-btn" style="text-align:center;cursor:pointer;background:none">
                         // LOGIN
@@ -134,7 +136,6 @@ $currentSlug = $page['slug'] ?? '';
 <footer class="cyber-footer">
     <div class="cyber-clock" id="cyber-clock">--:--:--</div>
     <?php if ($footMenu):
-        // Group by headers
         $groups = [];
         $current = ['header' => null, 'links' => []];
         foreach ($footMenu as $item) {
@@ -147,33 +148,28 @@ $currentSlug = $page['slug'] ?? '';
         }
         if ($current['header'] !== null || !empty($current['links'])) $groups[] = $current;
     ?>
-    <div style="display:flex;gap:2.5rem;align-items:flex-start">
+    <?php if ($groups): ?>
+    <div class="cyber-footer-menu">
         <?php foreach ($groups as $group): ?>
-        <div>
+        <div class="cyber-footer-group">
             <?php if ($group['header'] !== null): ?>
-            <div style="font-family:var(--mono);font-size:.82rem;color:var(--accent);letter-spacing:.1em;padding-bottom:.35rem">
-                <?= htmlspecialchars(strtoupper($group['header'])) ?>
-            </div>
-            <div style="height:1px;background:rgba(232,100,10,0.35);margin-bottom:.6rem"></div>
+            <div class="cyber-footer-heading"><?= htmlspecialchars(strtoupper($group['header'])) ?></div>
             <?php endif ?>
             <?php foreach ($group['links'] as $link): ?>
             <?php if ($link['type'] === 'header'): ?>
-            <div style="font-family:var(--mono);font-size:.8rem;color:var(--muted);letter-spacing:.05em;margin-bottom:.2rem">
-                <?= htmlspecialchars($link['label']) ?>
-            </div>
+            <div class="cyber-footer-note"><?= htmlspecialchars($link['label']) ?></div>
             <?php else: ?>
-            <div>
-                <a href="<?= htmlspecialchars(\Esse\Menu::itemUrl($link)) ?>"
-                   class="cyber-footer-link"
-                   <?= $link['target'] === '_blank' ? 'target="_blank" rel="noopener"' : '' ?>>
-                    <?= htmlspecialchars($link['label']) ?>
-                </a>
-            </div>
+            <a href="<?= htmlspecialchars(\Esse\Menu::itemUrl($link)) ?>"
+               class="cyber-footer-link"
+               <?= $link['target'] === '_blank' ? 'target="_blank" rel="noopener"' : '' ?>>
+                <?= htmlspecialchars($link['label']) ?>
+            </a>
             <?php endif ?>
             <?php endforeach ?>
         </div>
         <?php endforeach ?>
     </div>
+    <?php endif ?>
     <?php endif ?>
 </footer>
 
@@ -197,6 +193,17 @@ $currentSlug = $page['slug'] ?? '';
     document.querySelector('.cyber-user-menu')?.addEventListener('click', function(e) {
         e.stopPropagation();
     });
+
+    document.getElementById('cyber-user-toggle')?.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            this.classList.toggle('open');
+        }
+    });
+
+    <?php if ($loginFailed): ?>
+    document.querySelector('#navbar-login-form input[name="password"]')?.focus();
+    <?php endif ?>
 })();
 </script>
 </body>
