@@ -398,6 +398,34 @@ body::before {
   letter-spacing: .08em;
   text-transform: uppercase;
 }
+/* Gallery plugin badge overrides (gal-badge) */
+.gal-badge {
+  border-radius: 0 !important;
+  font-family: var(--mono);
+  font-weight: 400;
+  letter-spacing: .04em;
+  font-size: .7rem;
+  padding: .15em .5em;
+  border: 1px solid transparent;
+  display: inline-block;
+}
+.gal-badge-private, .gal-badge-intern, .gal-badge-internal {
+  background: rgba(251,191,36,0.10) !important;
+  border-color: rgba(251,191,36,0.45) !important;
+  color: #fbbf24 !important;
+}
+.gal-badge-public, .gal-badge-extern, .gal-badge-external {
+  background: rgba(56,189,248,0.10) !important;
+  border-color: rgba(56,189,248,0.45) !important;
+  color: #38bdf8 !important;
+}
+.gal-badge-count {
+  background: rgba(5,5,8,0.75) !important;
+  border-color: var(--border) !important;
+  color: var(--muted) !important;
+  border-radius: 0 !important;
+}
+
 /* Bootstrap badge overrides */
 .badge {
   border-radius: 0;
