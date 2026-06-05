@@ -16,7 +16,7 @@ $loginFailed = !empty($_GET['login_error']);
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= htmlspecialchars($page['title'] . ' // ' . $siteName) ?></title>
-    <link rel="stylesheet" href="/public/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/public/vendor/esse-ui/esse-ui.css">
     <link rel="stylesheet" href="<?= $theme->assetUrl('css/esse-cyber.css') ?>">
 </head>
 <body>
@@ -173,7 +173,6 @@ $loginFailed = !empty($_GET['login_error']);
     <?php endif ?>
 </footer>
 
-<script src="/public/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script>
 (function() {
     function tick() {

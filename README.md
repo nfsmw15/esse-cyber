@@ -5,7 +5,7 @@ Cyberpunk-Terminal-Theme für ESSE CMS. Dunkler Hintergrund mit orangem Akzent, 
 ## Voraussetzungen
 
 - ESSE CMS mit aktivem Plugin-System
-- Bootstrap 5 (wird über `/public/vendor/bootstrap/` eingebunden)
+- ESSE UI (wird über `/public/vendor/esse-ui/esse-ui.css` eingebunden)
 
 ## Installation
 
@@ -72,6 +72,8 @@ Alle Farben und Schriften sind über Custom Properties definiert und können in 
 | `--muted`   | `#9a9aa8`                  | Sekundärer Text, Metadaten       |
 | `--mono`    | `'Share Tech Mono', monospace` | Monospace-Schrift (UI-Labels) |
 | `--head`    | `'Rajdhani', sans-serif`   | Überschriften & Fließtext        |
+
+Zusätzlich setzt das Theme die `--esse-*` Variablen für die CMS-UI-Komponenten (`esse-panel`, `esse-btn`, `esse-alert`, `esse-table`, `esse-tabs` usw.), damit Plugin-Ausgaben in der Cyber-Optik erscheinen.
 
 ## Schriften
 
@@ -219,23 +221,20 @@ Das Theme unterstützt das ESSE-Grid-System für mehrspaltige Layouts in CMS-Inh
 | `4`         | 4               | 2               | 2               |
 | `6`         | 6               | 3               | 2               |
 
-## Bootstrap-Integration
+## ESSE-UI-Integration
 
-Bootstrap 5 wird global eingebunden. Innerhalb von `.cyber-content-wrap` werden Bootstrap-Container-Klassen zurückgesetzt, damit kein doppeltes Padding entsteht:
-
-```css
-.cyber-content-wrap .container,
-.cyber-content-wrap .container-fluid { padding-left: 0; padding-right: 0; max-width: 100%; }
-```
-
-Links innerhalb von `.cyber-content-wrap` werden auf die Akzentfarbe umgefärbt und unterstrichen. Bootstrap-Komponenten, die von Plugins in den Content gerendert werden, erhalten dunkle Theme-Overrides:
+Das Theme lädt `/public/vendor/esse-ui/esse-ui.css` und überschreibt die `esse-*` Komponenten über `assets/css/esse-cyber.css`.
 
 ```css
-.cyber-content-wrap .card,
-.cyber-content-wrap .list-group-item,
-.cyber-content-wrap .alert,
-.cyber-content-wrap .form-control { ... }
+.esse-panel,
+.esse-btn,
+.esse-alert,
+.esse-table,
+.esse-tabs-btn,
+.esse-empty-state { ... }
 ```
+
+Plugin-Ausgaben sollen die CMS-eigenen `esse-*` Klassen verwenden und werden dadurch im Cyber-Stil dargestellt.
 
 ## Theme.php — Boot-Prozess
 
