@@ -135,6 +135,7 @@ $loginFailed = !empty($_GET['login_error']);
 <!-- Footer -->
 <footer class="cyber-footer">
     <div class="cyber-clock" id="cyber-clock">--:--:--</div>
+    <div class="cyber-copyright">&copy; <?= date('Y') ?> <?= htmlspecialchars($siteName) ?></div>
     <?php if ($footMenu):
         $groups = [];
         $current = ['header' => null, 'links' => []];
