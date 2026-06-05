@@ -678,8 +678,10 @@ body::before {
   letter-spacing: .06em;
   opacity: .6;
   position: absolute;
+  bottom: .75rem;
   left: 50%;
   transform: translateX(-50%);
+  white-space: nowrap;
 }
 
 .cyber-footer-menu {
