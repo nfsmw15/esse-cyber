@@ -342,6 +342,22 @@ body::before {
   letter-spacing: .08em;
   text-transform: uppercase;
 }
+/* Global esse-ui fallbacks for plugin pages without .cyber-content-wrap */
+.esse-btn--primary {
+  background: rgba(232,100,10,0.18);
+  border-color: rgba(232,100,10,0.6);
+  color: var(--accent2);
+}
+.esse-btn--primary:hover {
+  background: rgba(232,100,10,0.30);
+  border-color: var(--accent);
+  color: var(--text);
+  opacity: 1;
+}
+.esse-table tbody tr:hover {
+  background: rgba(232,100,10,0.06);
+}
+
 .cyber-content-wrap .esse-btn {
   border-radius: 0;
   font-family: var(--mono);
