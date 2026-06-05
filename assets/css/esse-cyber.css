@@ -431,6 +431,30 @@ body::before {
   color: var(--muted);
   border-color: var(--border);
 }
+.cyber-content-wrap .esse-badge--warning,
+.esse-badge--warning {
+  background: rgba(251,191,36,0.08);
+  border-color: rgba(251,191,36,0.45);
+  color: #fbbf24;
+}
+.cyber-content-wrap .esse-badge--info,
+.esse-badge--info {
+  background: rgba(56,189,248,0.08);
+  border-color: rgba(56,189,248,0.45);
+  color: #38bdf8;
+}
+.cyber-content-wrap .esse-badge--success,
+.esse-badge--success {
+  background: rgba(34,197,94,0.08);
+  border-color: rgba(34,197,94,0.45);
+  color: #22c55e;
+}
+.cyber-content-wrap .esse-badge--danger,
+.esse-badge--danger {
+  background: rgba(248,113,113,0.08);
+  border-color: rgba(248,113,113,0.45);
+  color: #f87171;
+}
 .cyber-content-wrap .esse-table {
   color: var(--text);
   border-color: var(--border);
