@@ -5,6 +5,16 @@ Format nach [Keep a Changelog](https://keepachangelog.com/de/0.2.0/), Versionier
 
 ---
 
+## [0.5.3] – 2026-06-05
+
+### Geändert
+- Mobile Login-Menüs werden als fixes Panel unter der Topbar angezeigt — das Dropdown wird nicht mehr durch den kompakten User-Button abgeschnitten
+- Mobile Topbar: User-Text wird über `.cyber-user-label` gekürzt, ohne das Dropdown selbst zu beschneiden
+- Mobile Content-Höhe wieder angehoben — kurze Seiten behalten mehr Abstand zum statischen Footer
+- Profil-/CMS-Formulare: nackte `input[type=submit]` und `button[type=submit]` innerhalb von `.cyber-content-wrap` erhalten den Cyber-Button-Stil
+
+---
+
 ## [0.5.2] – 2026-06-05
 
 ### Geändert

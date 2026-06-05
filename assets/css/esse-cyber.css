@@ -205,6 +205,12 @@ body::before {
   50%      { opacity:.3; }
 }
 
+.cyber-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 /* User menu */
 .cyber-user {
   position: relative;
@@ -218,6 +224,7 @@ body::before {
   transition: border-color .2s, color .2s;
 }
 .cyber-user:hover { border-color: var(--accent); color: var(--accent); }
+.cyber-user-label { display: block; }
 
 .cyber-user-menu {
   display: none;
@@ -515,6 +522,28 @@ body::before {
 }
 .cyber-content-wrap .esse-btn--link {
   color: var(--accent);
+}
+.cyber-content-wrap input[type=submit],
+.cyber-content-wrap button[type=submit] {
+  appearance: none;
+  -webkit-appearance: none;
+  background: rgba(232,100,10,0.12);
+  border: 1px solid rgba(232,100,10,0.45);
+  border-radius: 0;
+  color: var(--accent2);
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: .8rem;
+  letter-spacing: .08em;
+  padding: .5rem 1.25rem;
+  text-decoration: none;
+  transition: background .2s, border-color .2s, color .2s;
+}
+.cyber-content-wrap input[type=submit]:hover,
+.cyber-content-wrap button[type=submit]:hover {
+  background: rgba(232,100,10,0.22);
+  border-color: var(--accent);
+  color: var(--text);
 }
 .cyber-content-wrap .esse-alert {
   border-radius: 0;
@@ -919,14 +948,35 @@ textarea:focus-visible {
   .cyber-nav-close { display: block; }
 
   /* Topbar: Logo fills available space, user button compact, status hidden */
-  .cyber-logo { flex: 1; }
-  .cyber-status { display: none; }
-  .cyber-user {
-    max-width: 8rem;
+  .cyber-logo {
+    flex: 1;
+    min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+  .cyber-actions {
+    flex-shrink: 0;
+    gap: .5rem;
+  }
+  .cyber-status { display: none; }
+  .cyber-user {
+    max-width: min(8rem, 34vw);
+    overflow: visible;
     white-space: nowrap;
     font-size: .75rem;
+  }
+  .cyber-user-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .cyber-user-menu {
+    position: fixed;
+    top: 3.75rem;
+    left: 1rem;
+    right: 1rem;
+    min-width: 0;
+    max-width: none;
+    z-index: 520;
   }
 
   /* Nav becomes fullscreen overlay */
@@ -1006,7 +1056,7 @@ textarea:focus-visible {
   }
   .cyber-footer-group { min-width: 9rem; }
   .cyber-corner.bl, .cyber-corner.br { bottom: 12px; }
-  .cyber-main { min-height: 0; padding: 4.5rem 1rem 2rem; }
+  .cyber-main { min-height: calc(100svh - 4rem); padding: 4.5rem 1rem 3rem; }
 }
 
 /* Skip-to-content */

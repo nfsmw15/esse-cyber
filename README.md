@@ -35,7 +35,7 @@ esse-cyber/
 ```json
 {
     "name": "esse-cyber",
-    "version": "0.5.2",
+    "version": "0.5.3",
     "description": "Cyberpunk terminal theme with scanlines, grid background and orange accent.",
     "author": "ESSE CMS",
     "class": "EsseCyber\\Theme",
@@ -157,10 +157,12 @@ Auf mobilen Viewports (≤768px) wird `.cyber-nav` zu einem fullscreen-Overlay (
 
 ```
 .cyber-user         Toggle-Button (click-toggles .open)
+.cyber-user-label   Kürzbarer Text innerhalb des Toggle-Buttons
 .cyber-user-menu    Dropdown (sichtbar wenn .open gesetzt)
 ```
 
 Das Menü öffnet und schließt sich per Click oder Tastatur (`Enter`/Leertaste) auf `#cyber-user-toggle`. Klicks außerhalb schließen es.
+Auf mobilen Viewports wird das Dropdown als fixes Panel unter der Topbar angezeigt, damit lange Button-Texte gekürzt werden können ohne das Login-Menü abzuschneiden.
 
 ### Hintergrund-Effekte
 
@@ -210,6 +212,8 @@ Formatiert CMS-Content automatisch:
 .cyber-error-msg    Meldungstext
 .cyber-error-links  Link-Container (.cyber-btn)
 ```
+
+Nackte `input[type=submit]` und `button[type=submit]` innerhalb von `.cyber-content-wrap` erhalten ebenfalls den Cyber-Button-Stil. Das deckt CMS-Formulare wie das Profil ab, auch wenn sie keine `esse-btn` oder `cyber-btn` Klasse setzen.
 
 ### Status-Anzeige
 

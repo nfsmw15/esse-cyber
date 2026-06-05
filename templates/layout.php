@@ -75,10 +75,10 @@ $loginFailed = !empty($_GET['login_error']);
         <?php endforeach ?>
     </div>
 
-    <div style="display:flex;align-items:center;gap:1rem">
+    <div class="cyber-actions">
         <?php if (\Esse\Auth::check()): ?>
         <div class="cyber-user" id="cyber-user-toggle" tabindex="0" onclick="event.stopPropagation();this.classList.toggle('open')" style="user-select:none">
-            [ <?= htmlspecialchars(\Esse\Auth::user()['display_name'] ?? '') ?> ▾ ]
+            <span class="cyber-user-label">[ <?= htmlspecialchars(\Esse\Auth::user()['display_name'] ?? '') ?> ▾ ]</span>
             <div class="cyber-user-menu">
                 <a href="/profil">// Profil</a>
                 <?php if (\Esse\Auth::meetsRole('author')): ?>
@@ -92,7 +92,7 @@ $loginFailed = !empty($_GET['login_error']);
         </div>
         <?php else: ?>
         <div class="cyber-user <?= $loginFailed ? 'open' : '' ?>" id="cyber-user-toggle" tabindex="0" onclick="event.stopPropagation();this.classList.toggle('open')" style="user-select:none">
-            [ Login ▾ ]
+            <span class="cyber-user-label">[ Login ▾ ]</span>
             <div class="cyber-user-menu" style="min-width:220px;padding:.75rem">
                 <?php if ($loginFailed): ?>
                 <div style="font-family:var(--mono);font-size:.8rem;color:#f87171;padding:.25rem .5rem .75rem;border-bottom:1px solid var(--border);margin-bottom:.5rem">
