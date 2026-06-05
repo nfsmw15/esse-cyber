@@ -16,10 +16,21 @@ $loginFailed = !empty($_GET['login_error']);
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= htmlspecialchars($page['title'] . ' // ' . $siteName) ?></title>
+    <?php if (!empty($page['description'])): ?>
+    <meta name="description" content="<?= htmlspecialchars($page['description']) ?>">
+    <?php endif ?>
+    <meta property="og:title"       content="<?= htmlspecialchars($page['title'] . ' // ' . $siteName) ?>">
+    <meta property="og:type"        content="website">
+    <meta property="og:url"         content="<?= htmlspecialchars('https://' . ($_SERVER['HTTP_HOST'] ?? '') . ($_SERVER['REQUEST_URI'] ?? '/')) ?>">
+    <?php if (!empty($page['description'])): ?>
+    <meta property="og:description" content="<?= htmlspecialchars($page['description']) ?>">
+    <?php endif ?>
     <link rel="stylesheet" href="/public/vendor/esse-ui/esse-ui.css">
     <link rel="stylesheet" href="<?= $theme->assetUrl('css/esse-cyber.css') ?>">
 </head>
 <body>
+
+<a href="#cyber-main" class="cyber-skip-link">Zum Inhalt springen</a>
 
 <div class="cyber-grid"></div>
 <div class="cyber-glow"></div>
@@ -118,7 +129,7 @@ $loginFailed = !empty($_GET['login_error']);
 </nav>
 
 <!-- Content -->
-<main class="cyber-main">
+<main class="cyber-main" id="cyber-main">
     <div style="width:100%;max-width:860px">
         <?php if (!empty($page['title'])): ?>
         <h1 class="cyber-page-title">
