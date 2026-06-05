@@ -36,7 +36,7 @@ esse-cyber/
 ```json
 {
     "name": "esse-cyber",
-    "version": "0.5.5",
+    "version": "0.5.6",
     "description": "Cyberpunk terminal theme with scanlines, grid background and orange accent.",
     "author": "ESSE CMS",
     "class": "EsseCyber\\Theme",
@@ -156,7 +156,7 @@ Die Scroll-Progress-Bar wird per JavaScript anhand der aktuellen Scroll-Position
 .cyber-nav-close    Schließen-Button innerhalb des Nav-Overlays
 ```
 
-Auf mobilen Viewports (≤768px) wird `.cyber-nav` zu einem fullscreen-Overlay (`position: fixed`, `width: 100vw`, `height: 100dvh`, `z-index: 490`). Dropdowns expandieren inline statt als Hover-Menü. Schließt per `Escape`, ✕-Button oder Klick auf den Hintergrund.
+Auf mobilen Viewports (≤768px) wird `.cyber-nav` zu einem fullscreen-Overlay (`position: fixed`, `width: 100vw`, `height: 100dvh`, `z-index: 490`). Dropdowns werden inline als zuklappbare Gruppen dargestellt und öffnen per Tap auf den Parent-Link. Schließt per `Escape`, ✕-Button oder Klick auf den Hintergrund.
 
 ### User-Menu
 

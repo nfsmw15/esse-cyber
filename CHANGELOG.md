@@ -5,6 +5,16 @@ Format nach [Keep a Changelog](https://keepachangelog.com/de/0.2.0/), Versionier
 
 ---
 
+## [0.5.6] – 2026-06-05
+
+### Geändert
+- Mobile Navigation: Dropdown-Menüpunkte sind im Hamburger-Menü standardmäßig geschlossen und lassen sich per Tap auf den Parent-Link öffnen
+- Mobile Navigation: offene Dropdowns werden beim Schließen des Hamburger-Menüs zurückgesetzt
+- Mobile Navigation: Untermenü-Links ohne falsch platzierte Trennlinie hinter dem Linktext
+- Mobile Navigation: Parent-Links mit Untermenü bleiben navigierbar; nur der separate Pfeil klappt Unterpunkte auf
+
+---
+
 ## [0.5.5] – 2026-06-05
 
 ### Hinzugefügt

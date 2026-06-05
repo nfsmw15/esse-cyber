@@ -47,16 +47,24 @@ $loginFailed = !empty($_GET['login_error']);
 
     <div class="cyber-nav" id="cyber-nav">
         <button class="cyber-nav-close" id="cyber-nav-close" aria-label="Navigation schließen">✕</button>
-        <?php foreach ($mainMenu as $item):
+        <?php foreach ($mainMenu as $itemIndex => $item):
             $url = \Esse\Menu::itemUrl($item);
             $isActive = $currentSlug === ltrim($url, '/');
         ?>
         <?php if (!empty($item['children'])): ?>
+        <?php $navDropdownId = 'cyber-nav-dropdown-' . $itemIndex; ?>
         <div class="cyber-dropdown">
-            <a href="<?= htmlspecialchars($url) ?>" class="<?= $isActive ? 'active' : '' ?>">
-                <?= htmlspecialchars($item['label']) ?> ▾
-            </a>
-            <div class="cyber-dropdown-menu">
+            <div class="cyber-dropdown-row">
+                <a href="<?= htmlspecialchars($url) ?>" class="<?= $isActive ? 'active' : '' ?>">
+                    <?= htmlspecialchars($item['label']) ?>
+                </a>
+                <button type="button"
+                        class="cyber-dropdown-toggle"
+                        aria-label="<?= htmlspecialchars($item['label']) ?> Untermenü öffnen"
+                        aria-expanded="false"
+                        aria-controls="<?= htmlspecialchars($navDropdownId) ?>">▾</button>
+            </div>
+            <div class="cyber-dropdown-menu" id="<?= htmlspecialchars($navDropdownId) ?>">
                 <?php foreach ($item['children'] as $child): ?>
                 <?php if ($child['type'] !== 'header'): ?>
                 <a href="<?= htmlspecialchars(\Esse\Menu::itemUrl($child)) ?>"
@@ -237,6 +245,7 @@ $loginFailed = !empty($_GET['login_error']);
     const menuBtn = document.getElementById('cyber-menu-btn');
     const nav     = document.getElementById('cyber-nav');
     const navClose = document.getElementById('cyber-nav-close');
+    const mobileNav = window.matchMedia('(max-width: 768px)');
 
     function openNav() {
         nav.classList.add('open');
@@ -246,6 +255,10 @@ $loginFailed = !empty($_GET['login_error']);
     }
     function closeNav() {
         nav.classList.remove('open');
+        nav.querySelectorAll('.cyber-dropdown.open').forEach(function(dropdown) {
+            dropdown.classList.remove('open');
+            dropdown.querySelector('.cyber-dropdown-toggle')?.setAttribute('aria-expanded', 'false');
+        });
         menuBtn.setAttribute('aria-expanded', 'false');
         document.body.classList.remove('nav-open');
         menuBtn.focus();
@@ -253,6 +266,17 @@ $loginFailed = !empty($_GET['login_error']);
 
     menuBtn?.addEventListener('click', openNav);
     navClose?.addEventListener('click', closeNav);
+    nav?.addEventListener('click', function(e) {
+        const dropdownToggle = e.target.closest('.cyber-dropdown-toggle');
+        if (!dropdownToggle || !nav.contains(dropdownToggle) || !mobileNav.matches) return;
+
+        e.preventDefault();
+        const dropdown = dropdownToggle.closest('.cyber-dropdown');
+        if (!dropdown) return;
+
+        dropdown.classList.toggle('open');
+        dropdownToggle.setAttribute('aria-expanded', dropdown.classList.contains('open') ? 'true' : 'false');
+    });
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && nav.classList.contains('open')) closeNav();
     });
