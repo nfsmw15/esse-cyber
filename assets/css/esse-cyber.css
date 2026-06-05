@@ -398,6 +398,44 @@ body::before {
   letter-spacing: .08em;
   text-transform: uppercase;
 }
+/* Bootstrap badge overrides */
+.badge {
+  border-radius: 0;
+  font-family: var(--mono);
+  font-weight: 400;
+  letter-spacing: .04em;
+}
+.badge.bg-warning, .badge.text-bg-warning {
+  background: rgba(251,191,36,0.12) !important;
+  color: #fbbf24 !important;
+  border: 1px solid rgba(251,191,36,0.45);
+}
+.badge.bg-info, .badge.text-bg-info {
+  background: rgba(56,189,248,0.10) !important;
+  color: #38bdf8 !important;
+  border: 1px solid rgba(56,189,248,0.45);
+}
+.badge.bg-success, .badge.text-bg-success {
+  background: rgba(34,197,94,0.10) !important;
+  color: #22c55e !important;
+  border: 1px solid rgba(34,197,94,0.45);
+}
+.badge.bg-danger, .badge.text-bg-danger {
+  background: rgba(248,113,113,0.10) !important;
+  color: #f87171 !important;
+  border: 1px solid rgba(248,113,113,0.45);
+}
+.badge.bg-primary, .badge.text-bg-primary {
+  background: rgba(232,100,10,0.12) !important;
+  color: var(--accent2) !important;
+  border: 1px solid rgba(232,100,10,0.45);
+}
+.badge.bg-secondary, .badge.text-bg-secondary {
+  background: rgba(154,154,168,0.12) !important;
+  color: var(--muted) !important;
+  border: 1px solid var(--border);
+}
+
 /* Global esse-ui fallbacks for plugin pages without .cyber-content-wrap */
 .esse-btn--primary {
   background: rgba(232,100,10,0.18);
@@ -851,6 +889,17 @@ textarea:focus-visible {
   .cyber-topbar { padding: .65rem 1rem; gap: .5rem; }
   .cyber-menu-btn { display: flex; }
   .cyber-nav-close { display: block; }
+
+  /* Topbar: Logo fills available space, user button compact, status hidden */
+  .cyber-logo { flex: 1; }
+  .cyber-status { display: none; }
+  .cyber-user {
+    max-width: 8rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: .75rem;
+  }
 
   /* Nav becomes fullscreen overlay */
   .cyber-nav {
