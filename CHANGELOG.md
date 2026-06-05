@@ -5,6 +5,14 @@ Format nach [Keep a Changelog](https://keepachangelog.com/de/0.2.0/), Versionier
 
 ---
 
+## [0.4.1] – 2026-06-04
+
+### Geändert
+- `esse-btn--primary`: globaler Fallback ergänzt — Button ist auf Plugin-Seiten ohne `.cyber-content-wrap` jetzt mit klarer Kontur und Farbsättigung sichtbar
+- `esse-table`: globaler `tbody tr:hover`-Fallback verhindert weißen Hintergrund auf Plugin-Seiten außerhalb des Content-Wrappers
+
+---
+
 ## [0.4.0] - 2026-06-05
 
 ### Hinzugefügt
