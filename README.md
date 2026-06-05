@@ -35,7 +35,7 @@ esse-cyber/
 ```json
 {
     "name": "esse-cyber",
-    "version": "0.5.3",
+    "version": "0.5.4",
     "description": "Cyberpunk terminal theme with scanlines, grid background and orange accent.",
     "author": "ESSE CMS",
     "class": "EsseCyber\\Theme",
@@ -151,7 +151,7 @@ Springt zu `#cyber-main`. Taucht nur auf wenn per Tastatur navigiert wird.
 .cyber-nav-close    Schließen-Button innerhalb des Nav-Overlays
 ```
 
-Auf mobilen Viewports (≤768px) wird `.cyber-nav` zu einem fullscreen-Overlay (`position: fixed, z-index: 490`). Dropdowns expandieren inline statt als Hover-Menü. Schließt per `Escape`, ✕-Button oder Klick auf den Hintergrund.
+Auf mobilen Viewports (≤768px) wird `.cyber-nav` zu einem fullscreen-Overlay (`position: fixed`, `width: 100vw`, `height: 100dvh`, `z-index: 490`). Dropdowns expandieren inline statt als Hover-Menü. Schließt per `Escape`, ✕-Button oder Klick auf den Hintergrund.
 
 ### User-Menu
 
@@ -199,8 +199,12 @@ Formatiert CMS-Content automatisch:
 .cyber-clock        Live-Uhr (#cyber-clock, per JS aktualisiert), links
 .cyber-copyright    Copyright-Hinweis, zentriert (© Jahr Site-Name)
 .cyber-footer-menu  Rechts verankerte Footer-Menügruppen im HUD-Balken
+.cyber-footer-heading  Gruppenüberschrift; nur mobil als Accordion-Toggle aktiv
+.cyber-footer-items    Linkgruppe; Desktop offen, mobil einklappbar
 .cyber-footer-link  Einzel-Link im Footer-Menü
 ```
+
+Auf Desktop bleiben Footer-Gruppen vollständig offen. Auf mobilen Viewports (≤768px) werden sie als Accordion dargestellt: Überschriften sind aktivierbare Toggle-Buttons, Linkgruppen sind zunächst geschlossen und öffnen per Tap.
 
 ### Buttons & Fehlerseite
 

@@ -164,22 +164,28 @@ $loginFailed = !empty($_GET['login_error']);
     ?>
     <?php if ($groups): ?>
     <div class="cyber-footer-menu">
-        <?php foreach ($groups as $group): ?>
+        <?php foreach ($groups as $groupIndex => $group): ?>
         <div class="cyber-footer-group">
-            <?php if ($group['header'] !== null): ?>
-            <div class="cyber-footer-heading"><?= htmlspecialchars(strtoupper($group['header'])) ?></div>
-            <?php endif ?>
+            <?php $footerGroupId = 'cyber-footer-group-' . $groupIndex; ?>
+            <button type="button"
+                    class="cyber-footer-heading"
+                    aria-expanded="false"
+                    aria-controls="<?= htmlspecialchars($footerGroupId) ?>">
+                <?= htmlspecialchars(strtoupper($group['header'] ?? 'MENÜ')) ?>
+            </button>
+            <div class="cyber-footer-items" id="<?= htmlspecialchars($footerGroupId) ?>">
             <?php foreach ($group['links'] as $link): ?>
             <?php if ($link['type'] === 'header'): ?>
-            <div class="cyber-footer-note"><?= htmlspecialchars($link['label']) ?></div>
+                <div class="cyber-footer-note"><?= htmlspecialchars($link['label']) ?></div>
             <?php else: ?>
-            <a href="<?= htmlspecialchars(\Esse\Menu::itemUrl($link)) ?>"
-               class="cyber-footer-link"
-               <?= $link['target'] === '_blank' ? 'target="_blank" rel="noopener"' : '' ?>>
-                <?= htmlspecialchars($link['label']) ?>
-            </a>
+                <a href="<?= htmlspecialchars(\Esse\Menu::itemUrl($link)) ?>"
+                   class="cyber-footer-link"
+                   <?= $link['target'] === '_blank' ? 'target="_blank" rel="noopener"' : '' ?>>
+                    <?= htmlspecialchars($link['label']) ?>
+                </a>
             <?php endif ?>
             <?php endforeach ?>
+            </div>
         </div>
         <?php endforeach ?>
     </div>
@@ -237,6 +243,38 @@ $loginFailed = !empty($_GET['login_error']);
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && nav.classList.contains('open')) closeNav();
     });
+
+    // Mobile footer accordions
+    const footerGroups = document.querySelectorAll('.cyber-footer-group');
+    const mobileFooter = window.matchMedia('(max-width: 768px)');
+
+    function syncFooterAccordions() {
+        footerGroups.forEach(function(group) {
+            const heading = group.querySelector('.cyber-footer-heading');
+            if (!heading) return;
+
+            if (!mobileFooter.matches) {
+                group.classList.remove('open');
+                heading.disabled = true;
+                heading.setAttribute('aria-expanded', 'true');
+                return;
+            }
+
+            heading.disabled = false;
+            heading.setAttribute('aria-expanded', group.classList.contains('open') ? 'true' : 'false');
+        });
+    }
+
+    footerGroups.forEach(function(group) {
+        const heading = group.querySelector('.cyber-footer-heading');
+        heading?.addEventListener('click', function() {
+            if (!mobileFooter.matches) return;
+            group.classList.toggle('open');
+            heading.setAttribute('aria-expanded', group.classList.contains('open') ? 'true' : 'false');
+        });
+    });
+    mobileFooter.addEventListener?.('change', syncFooterAccordions);
+    syncFooterAccordions();
 
     <?php if ($loginFailed): ?>
     document.querySelector('#navbar-login-form input[name="password"]')?.focus();

@@ -5,6 +5,16 @@ Format nach [Keep a Changelog](https://keepachangelog.com/de/0.2.0/), Versionier
 
 ---
 
+## [0.5.4] – 2026-06-05
+
+### Geändert
+- Mobile Navigation: Overlay nutzt explizit `100vw`/`100dvh` und deaktiviert mobilen Topbar-Blur — Hamburger-Menü öffnet nicht mehr nur im schmalen Topbar-Bereich
+- Mobile Footer-Menüs werden als Accordion dargestellt — nur Überschriften sichtbar, Linkgruppen per Tap aufklappbar
+- Desktop Footer-Menüs bleiben vollständig offen und sind nicht als Accordion fokussierbar oder klickbar
+- Desktop Topbar: User-/Login-Menü steht wieder links neben `ONLINE`; beide bleiben in einer horizontalen Zeile
+
+---
+
 ## [0.5.3] – 2026-06-05
 
 ### Geändert
