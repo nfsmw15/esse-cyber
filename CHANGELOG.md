@@ -5,6 +5,18 @@ Format nach [Keep a Changelog](https://keepachangelog.com/de/0.2.0/), Versionier
 
 ---
 
+## [0.4.0] - 2026-06-05
+
+### Hinzugefügt
+- ESSE-UI-Komponenten wie Panels, Buttons, Alerts, Badges, Tabellen, Tabs und Empty-States erhalten Cyber-Styles innerhalb des Theme-Content-Bereichs.
+
+### Geändert
+- Externe UI-Framework-Assets werden nicht mehr geladen; Plugin-Ausgaben werden über `esse-ui.css` und `esse-*` Klassen gestylt.
+- Hintergrund-Grid minimal sichtbarer gemacht und den orangenen Glow vergrößert.
+- README auf ESSE-UI-Integration aktualisiert.
+
+---
+
 ## [0.3.0] - 2026-06-04
 
 ### Hinzugefügt
@@ -12,11 +24,8 @@ Format nach [Keep a Changelog](https://keepachangelog.com/de/0.2.0/), Versionier
 - User-Menü lässt sich per Tastatur mit `Enter` und Leertaste öffnen.
 - Links im Content sind zusätzlich zur Akzentfarbe unterstrichen.
 - Lokaler Rajdhani-400-Webfont ersetzt die bisherigen Rajdhani-Schnitte, um Firefox-Font-Warnungen durch Glyph-Bounding-Boxes zu vermeiden.
-- ESSE-UI-Komponenten wie Panels, Buttons, Alerts, Badges, Tabellen, Tabs und Empty-States erhalten Cyber-Styles innerhalb des Theme-Content-Bereichs.
 
 ### Geändert
-- Externe UI-Framework-Assets werden nicht mehr geladen; Plugin-Ausgaben werden über `esse-ui.css` und `esse-*` Klassen gestylt.
-- Hintergrund-Grid minimal sichtbarer gemacht und den orangenen Glow vergrößert.
 - Scanlines abgeschwächt, kleinere UI-Texte ruhiger gesetzt und Letter-Spacing weiter reduziert.
 - Footer-Texte und Fehlermeldungen besser lesbar gemacht.
 - Footer als HUD-Balken mit linker Uhr und rechts verankerten Menügruppen ausgerichtet.
