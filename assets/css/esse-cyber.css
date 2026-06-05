@@ -913,7 +913,7 @@ textarea:focus-visible {
 }
 
 /* Mobile */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .cyber-topbar { padding: .65rem 1rem; gap: .5rem; }
   .cyber-menu-btn { display: flex; }
   .cyber-nav-close { display: block; }
@@ -1006,7 +1006,7 @@ textarea:focus-visible {
   }
   .cyber-footer-group { min-width: 9rem; }
   .cyber-corner.bl, .cyber-corner.br { bottom: 12px; }
-  .cyber-main { padding: 4.5rem 1rem 2rem; }
+  .cyber-main { min-height: 0; padding: 4.5rem 1rem 2rem; }
 }
 
 /* Skip-to-content */

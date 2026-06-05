@@ -5,6 +5,14 @@ Format nach [Keep a Changelog](https://keepachangelog.com/de/0.2.0/), Versionier
 
 ---
 
+## [0.5.2] – 2026-06-05
+
+### Geändert
+- Mobile Breakpoint von 600 px auf 768 px erhöht — Hamburger-Button und ONLINE-Ausblendung greifen jetzt zuverlässig auf allen Smartphones (Samsung-Browser, höhere DPI-Dichte)
+- `min-height: 100vh` auf `.cyber-main` wird auf mobilen Viewports aufgehoben — kein großer Leerraum mehr zwischen Inhalt und statischem Footer
+
+---
+
 ## [0.5.1] – 2026-06-04
 
 ### Geändert

@@ -35,7 +35,7 @@ esse-cyber/
 ```json
 {
     "name": "esse-cyber",
-    "version": "0.5.1",
+    "version": "0.5.2",
     "description": "Cyberpunk terminal theme with scanlines, grid background and orange accent.",
     "author": "ESSE CMS",
     "class": "EsseCyber\\Theme",
@@ -147,11 +147,11 @@ Springt zu `#cyber-main`. Taucht nur auf wenn per Tastatur navigiert wird.
 ### Mobile Navigation
 
 ```
-.cyber-menu-btn     Hamburger-Button (nur ≤600px sichtbar, .open animiert zu ✕)
+.cyber-menu-btn     Hamburger-Button (nur ≤768px sichtbar, .open animiert zu ✕)
 .cyber-nav-close    Schließen-Button innerhalb des Nav-Overlays
 ```
 
-Auf mobilen Viewports (≤600px) wird `.cyber-nav` zu einem fullscreen-Overlay (`position: fixed, z-index: 490`). Dropdowns expandieren inline statt als Hover-Menü. Schließt per `Escape`, ✕-Button oder Klick auf den Hintergrund.
+Auf mobilen Viewports (≤768px) wird `.cyber-nav` zu einem fullscreen-Overlay (`position: fixed, z-index: 490`). Dropdowns expandieren inline statt als Hover-Menü. Schließt per `Escape`, ✕-Button oder Klick auf den Hintergrund.
 
 ### User-Menu
 
@@ -232,8 +232,7 @@ Das Theme unterstützt das ESSE-Grid-System für mehrspaltige Layouts in CMS-Inh
 </div>
 ```
 
-| `data-cols` | Spalten Desktop | Tablet (≤768px) | Mobil (≤480px) |
-|-------------|-----------------|-----------------|-----------------|
+| `data-cols` | Spalten Desktop | Tablet (≤768px) | Mobil (≤480px) ||-------------|-----------------|-----------------|-----------------|
 | `2`         | 2               | 2               | 2               |
 | `3`         | 3               | 2               | 2               |
 | `4`         | 4               | 2               | 2               |
