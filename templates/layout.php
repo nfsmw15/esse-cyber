@@ -32,7 +32,8 @@ $loginFailed = !empty($_GET['login_error']);
 <nav class="cyber-topbar">
     <a href="/" class="cyber-logo"><?= htmlspecialchars(strtoupper($siteName)) ?></a>
 
-    <div class="cyber-nav">
+    <div class="cyber-nav" id="cyber-nav">
+        <button class="cyber-nav-close" id="cyber-nav-close" aria-label="Navigation schließen">✕</button>
         <?php foreach ($mainMenu as $item):
             $url = \Esse\Menu::itemUrl($item);
             $isActive = $currentSlug === ltrim($url, '/');
@@ -91,17 +92,15 @@ $loginFailed = !empty($_GET['login_error']);
                     <input type="hidden" name="_csrf"    value="<?= \Esse\Auth::csrfToken() ?>">
                     <input type="hidden" name="redirect" value="<?= htmlspecialchars($_SERVER['REQUEST_URI'] ?? '/') ?>">
                     <input type="email" name="login" placeholder="E-MAIL"
-                           autocomplete="username" required
-                           style="background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:.85rem;padding:.4rem .6rem;letter-spacing:.05em;width:100%">
+                           autocomplete="username" required>
                     <input type="password" name="password" placeholder="PASSWORD"
                            autocomplete="current-password" required
-                           <?= $loginFailed ? 'autofocus' : '' ?>
-                           style="background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:.85rem;padding:.4rem .6rem;letter-spacing:.05em;width:100%">
+                           <?= $loginFailed ? 'autofocus' : '' ?>>
                     <button type="submit" class="cyber-btn" style="text-align:center;cursor:pointer;background:none">
                         // LOGIN
                     </button>
                 </form>
-                <a href="/admin/forgot-password" style="display:block;text-align:center;padding:.25rem;font-family:var(--mono);font-size:.8rem;color:var(--muted);text-decoration:none">
+                <a href="/admin/forgot-password" class="cyber-forgot-link">
                     forgot password
                 </a>
             </div>
@@ -113,6 +112,9 @@ $loginFailed = !empty($_GET['login_error']);
             <span>ONLINE</span>
         </div>
     </div>
+    <button class="cyber-menu-btn" id="cyber-menu-btn" aria-label="Navigation öffnen" aria-expanded="false">
+        <span></span><span></span><span></span>
+    </button>
 </nav>
 
 <!-- Content -->
@@ -199,6 +201,30 @@ $loginFailed = !empty($_GET['login_error']);
             e.preventDefault();
             this.classList.toggle('open');
         }
+    });
+
+    // Mobile nav
+    const menuBtn = document.getElementById('cyber-menu-btn');
+    const nav     = document.getElementById('cyber-nav');
+    const navClose = document.getElementById('cyber-nav-close');
+
+    function openNav() {
+        nav.classList.add('open');
+        menuBtn.setAttribute('aria-expanded', 'true');
+        document.body.classList.add('nav-open');
+        navClose.focus();
+    }
+    function closeNav() {
+        nav.classList.remove('open');
+        menuBtn.setAttribute('aria-expanded', 'false');
+        document.body.classList.remove('nav-open');
+        menuBtn.focus();
+    }
+
+    menuBtn?.addEventListener('click', openNav);
+    navClose?.addEventListener('click', closeNav);
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && nav.classList.contains('open')) closeNav();
     });
 
     <?php if ($loginFailed): ?>
