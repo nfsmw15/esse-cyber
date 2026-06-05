@@ -5,6 +5,15 @@ Format nach [Keep a Changelog](https://keepachangelog.com/de/0.2.0/), Versionier
 
 ---
 
+## [0.5.1] – 2026-06-04
+
+### Geändert
+- Copyright-Position: sitzt jetzt unterhalb der Bracket-Linie im Footer-HUD
+- Topbar mobil: Logo übernimmt verfügbaren Platz, User-Button auf max. 8 rem begrenzt (Ellipsis bei langen Namen), ONLINE-Status ausgeblendet
+- Bootstrap-Badge-Klassen (`bg-warning/info/success/danger/primary/secondary`) auf Cyber-Stil überschrieben
+
+---
+
 ## [0.5.0] – 2026-06-04
 
 ### Hinzugefügt

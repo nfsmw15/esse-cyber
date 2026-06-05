@@ -35,7 +35,7 @@ esse-cyber/
 ```json
 {
     "name": "esse-cyber",
-    "version": "0.5.0",
+    "version": "0.5.1",
     "description": "Cyberpunk terminal theme with scanlines, grid background and orange accent.",
     "author": "ESSE CMS",
     "class": "EsseCyber\\Theme",
