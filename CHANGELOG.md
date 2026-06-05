@@ -5,6 +5,21 @@ Format nach [Keep a Changelog](https://keepachangelog.com/de/0.2.0/), Versionier
 
 ---
 
+## [0.5.0] – 2026-06-04
+
+### Hinzugefügt
+- Copyright-Hinweis im Footer-HUD-Balken, zentriert zwischen Uhr und Navigation
+- Mobile Navigation: Hamburger-Button öffnet fullscreen-Overlay mit allen Menüpunkten; Dropdowns expandieren inline; schließt per ✕-Button oder `Escape`; fokus-sicher
+- Globale Formular-Styles: `input`, `select`, `textarea`, `label` im Cyber-Stil (Surface-Hintergrund, Mono-Font, Akzent-Border bei Fokus, eigener `select`-Pfeil, `accent-color` für Checkboxen)
+- Skip-to-content Link: bei Tab-Navigation sichtbar, springt zu `#cyber-main`
+- Open Graph Meta Tags: `og:title`, `og:type`, `og:url`, `og:description` im `<head>`
+- Print-Styles: Topbar, Footer, Hintergrund-Effekte und Scanlines beim Drucken deaktiviert, lesbarer Schwarz-Weiß-Druck
+
+### Geändert
+- Login-Formular-Inline-Styles entfernt, werden von den globalen Formular-Styles gedeckt
+
+---
+
 ## [0.4.2] – 2026-06-04
 
 ### Geändert

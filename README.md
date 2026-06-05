@@ -35,7 +35,7 @@ esse-cyber/
 ```json
 {
     "name": "esse-cyber",
-    "version": "0.4.2",
+    "version": "0.5.0",
     "description": "Cyberpunk terminal theme with scanlines, grid background and orange accent.",
     "author": "ESSE CMS",
     "class": "EsseCyber\\Theme",
@@ -136,6 +136,23 @@ Erwartet: `$page['error_code']`, `$page['error_title']`, `$page['error_message']
 
 Das Dropdown öffnet sich per CSS-`:hover` und `:focus-within` ohne JavaScript.
 
+### Skip-to-content
+
+```
+.cyber-skip-link    Visuell versteckt, bei :focus sichtbar (orangener Balken oben links)
+```
+
+Springt zu `#cyber-main`. Taucht nur auf wenn per Tastatur navigiert wird.
+
+### Mobile Navigation
+
+```
+.cyber-menu-btn     Hamburger-Button (nur ≤600px sichtbar, .open animiert zu ✕)
+.cyber-nav-close    Schließen-Button innerhalb des Nav-Overlays
+```
+
+Auf mobilen Viewports (≤600px) wird `.cyber-nav` zu einem fullscreen-Overlay (`position: fixed, z-index: 490`). Dropdowns expandieren inline statt als Hover-Menü. Schließt per `Escape`, ✕-Button oder Klick auf den Hintergrund.
+
 ### User-Menu
 
 ```
@@ -177,7 +194,8 @@ Formatiert CMS-Content automatisch:
 
 ```
 .cyber-footer       Fixierter Footer unten
-.cyber-clock        Live-Uhr (#cyber-clock, per JS aktualisiert)
+.cyber-clock        Live-Uhr (#cyber-clock, per JS aktualisiert), links
+.cyber-copyright    Copyright-Hinweis, zentriert (© Jahr Site-Name)
 .cyber-footer-menu  Rechts verankerte Footer-Menügruppen im HUD-Balken
 .cyber-footer-link  Einzel-Link im Footer-Menü
 ```
@@ -235,6 +253,18 @@ Das Theme lädt `/public/vendor/esse-ui/esse-ui.css` und überschreibt die `esse
 ```
 
 Plugin-Ausgaben sollen die CMS-eigenen `esse-*` Klassen verwenden und werden dadurch im Cyber-Stil dargestellt.
+
+## Open Graph
+
+`layout.php` setzt automatisch im `<head>`:
+
+| Tag | Quelle |
+|---|---|
+| `og:title` | `$page['title'] // $siteName` |
+| `og:type` | `website` (fest) |
+| `og:url` | `HTTP_HOST` + `REQUEST_URI` |
+| `og:description` | `$page['description']` (nur wenn gesetzt) |
+| `meta[name=description]` | `$page['description']` (nur wenn gesetzt) |
 
 ## Theme.php — Boot-Prozess
 
