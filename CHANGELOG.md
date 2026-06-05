@@ -5,6 +5,20 @@ Format nach [Keep a Changelog](https://keepachangelog.com/de/0.2.0/), Versionier
 
 ---
 
+## [0.5.5] – 2026-06-05
+
+### Hinzugefügt
+- Scroll-Progress-Bar: dünne orangene Linie am oberen Viewport-Rand zeigt Lesefortschritt
+- Pagination-Styles für `esse-pagination` und generische `.pagination` innerhalb des Content-Wrappers
+- `figure`/`figcaption` Styles im Content-Bereich
+- Konfigurierbarer Copyright-Text über Setting `theme_esse-cyber_copyright` mit Platzhaltern `{year}` und `{site}`
+- Rajdhani 700 als lokaler Webfont für echte Bold-Headlines
+
+### Geändert
+- Mobile Footer-Accordion nutzt Event-Delegation auf dem Footer-Menü — alle Gruppen lassen sich konsistent öffnen und schließen
+
+---
+
 ## [0.5.4] – 2026-06-05
 
 ### Geändert

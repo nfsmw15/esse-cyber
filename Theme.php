@@ -26,6 +26,13 @@ class Theme extends \Esse\Theme
         $siteName = $this->settings['site_name'] ?? 'ESSE CMS';
         $mainSlug = $this->settings['theme_esse-cyber_menu_main']   ?? 'main';
         $footSlug = $this->settings['theme_esse-cyber_menu_footer']  ?? 'footer';
+        $copyrightTemplate = trim($this->settings['theme_esse-cyber_copyright'] ?? '');
+        $copyrightText = $copyrightTemplate !== ''
+            ? strtr($copyrightTemplate, [
+                '{year}' => date('Y'),
+                '{site}' => $siteName,
+            ])
+            : '© ' . date('Y') . ' ' . $siteName;
 
         $mainMenu = Menu::get($mainSlug);
         $footMenu = $footSlug ? Menu::get($footSlug) : [];

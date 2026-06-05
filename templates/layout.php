@@ -5,6 +5,7 @@
  * @var string           $siteName
  * @var array            $mainMenu
  * @var array            $footMenu
+ * @var string           $copyrightText
  * @var \EsseCyber\Theme  $theme
  */
 $currentSlug = $page['slug'] ?? '';
@@ -31,6 +32,7 @@ $loginFailed = !empty($_GET['login_error']);
 <body>
 
 <a href="#cyber-main" class="cyber-skip-link">Zum Inhalt springen</a>
+<div class="cyber-scroll-progress" id="cyber-scroll-progress" aria-hidden="true"></div>
 
 <div class="cyber-grid"></div>
 <div class="cyber-glow"></div>
@@ -148,7 +150,7 @@ $loginFailed = !empty($_GET['login_error']);
 <!-- Footer -->
 <footer class="cyber-footer">
     <div class="cyber-clock" id="cyber-clock">--:--:--</div>
-    <div class="cyber-copyright">&copy; <?= date('Y') ?> <?= htmlspecialchars($siteName) ?></div>
+    <div class="cyber-copyright"><?= htmlspecialchars($copyrightText) ?></div>
     <?php if ($footMenu):
         $groups = [];
         $current = ['header' => null, 'links' => []];
@@ -203,6 +205,17 @@ $loginFailed = !empty($_GET['login_error']);
     tick();
     setInterval(tick, 1000);
 
+    const scrollProgress = document.getElementById('cyber-scroll-progress');
+    function updateScrollProgress() {
+        if (!scrollProgress) return;
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = max > 0 ? Math.min(window.scrollY / max, 1) : 0;
+        scrollProgress.style.transform = 'scaleX(' + progress + ')';
+    }
+    updateScrollProgress();
+    document.addEventListener('scroll', updateScrollProgress, { passive: true });
+    window.addEventListener('resize', updateScrollProgress);
+
     // Close user menu when clicking outside
     document.addEventListener('click', function() {
         document.getElementById('cyber-user-toggle')?.classList.remove('open');
@@ -245,6 +258,7 @@ $loginFailed = !empty($_GET['login_error']);
     });
 
     // Mobile footer accordions
+    const footerMenu = document.querySelector('.cyber-footer-menu');
     const footerGroups = document.querySelectorAll('.cyber-footer-group');
     const mobileFooter = window.matchMedia('(max-width: 768px)');
 
@@ -265,13 +279,16 @@ $loginFailed = !empty($_GET['login_error']);
         });
     }
 
-    footerGroups.forEach(function(group) {
-        const heading = group.querySelector('.cyber-footer-heading');
-        heading?.addEventListener('click', function() {
-            if (!mobileFooter.matches) return;
-            group.classList.toggle('open');
-            heading.setAttribute('aria-expanded', group.classList.contains('open') ? 'true' : 'false');
-        });
+    footerMenu?.addEventListener('click', function(e) {
+        const heading = e.target.closest('.cyber-footer-heading');
+        if (!heading || !footerMenu.contains(heading) || !mobileFooter.matches) return;
+
+        e.preventDefault();
+        const group = heading.closest('.cyber-footer-group');
+        if (!group) return;
+
+        group.classList.toggle('open');
+        heading.setAttribute('aria-expanded', group.classList.contains('open') ? 'true' : 'false');
     });
     mobileFooter.addEventListener?.('change', syncFooterAccordions);
     syncFooterAccordions();

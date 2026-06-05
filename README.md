@@ -20,6 +20,7 @@ esse-cyber/
 │   │   └── esse-cyber.css      # Gesamtes Stylesheet
 │   └── fonts/
 │       ├── rajdhani-400.woff2
+│       ├── rajdhani-700.woff2
 │       └── share-tech-mono.woff2
 ├── templates/
 │   ├── layout.php              # Standard-Seiten-Layout
@@ -35,7 +36,7 @@ esse-cyber/
 ```json
 {
     "name": "esse-cyber",
-    "version": "0.5.4",
+    "version": "0.5.5",
     "description": "Cyberpunk terminal theme with scanlines, grid background and orange accent.",
     "author": "ESSE CMS",
     "class": "EsseCyber\\Theme",
@@ -56,6 +57,7 @@ esse-cyber/
 Die Menü-Slugs werden über die CMS-Settings gespeichert:
 - `theme_esse-cyber_menu_main` → Slug des Hauptmenüs (Standard: `main`)
 - `theme_esse-cyber_menu_footer` → Slug des Footer-Menüs (Standard: `footer`)
+- `theme_esse-cyber_copyright` → Footer-Copyright-Text; unterstützt `{year}` und `{site}` (Standard: `© {year} {site}`)
 
 ## Design-Tokens (CSS Custom Properties)
 
@@ -81,7 +83,7 @@ Alle Schriften werden lokal aus `assets/fonts/` geladen, kein CDN erforderlich.
 
 | Schriftart       | Gewichte    | Verwendung           |
 |------------------|-------------|----------------------|
-| Rajdhani         | 400         | Überschriften, Text; Fettungen werden per CSS synthetisiert |
+| Rajdhani         | 400, 700    | Überschriften, Text; echte 700er Fettung für Headlines |
 | Share Tech Mono  | 400         | UI-Labels, Code      |
 
 ## Templates
@@ -97,6 +99,7 @@ Vollständiges HTML-Dokument für normale Seiten. Erwartet folgende Variablen:
 | `$siteName` | `string`             | Name der Website                      |
 | `$mainMenu` | `array`              | Items des Hauptmenüs                  |
 | `$footMenu` | `array`              | Items des Footer-Menüs                |
+| `$copyrightText` | `string`       | Gerenderter Copyright-Text            |
 | `$theme`    | `\EsseCyber\Theme`   | Theme-Instanz (für `assetUrl()` etc.) |
 
 Aufbau:
@@ -140,9 +143,11 @@ Das Dropdown öffnet sich per CSS-`:hover` und `:focus-within` ohne JavaScript.
 
 ```
 .cyber-skip-link    Visuell versteckt, bei :focus sichtbar (orangener Balken oben links)
+.cyber-scroll-progress  Fixe Lesefortschritts-Linie am oberen Viewport-Rand
 ```
 
 Springt zu `#cyber-main`. Taucht nur auf wenn per Tastatur navigiert wird.
+Die Scroll-Progress-Bar wird per JavaScript anhand der aktuellen Scroll-Position aktualisiert und beim Drucken ausgeblendet.
 
 ### Mobile Navigation
 
@@ -191,6 +196,17 @@ Formatiert CMS-Content automatisch:
 - `pre` → Surface-Hintergrund, linker Akzentrahmen
 - `blockquote` → linker Akzentrahmen, gedämpfte Farbe
 - `table` → Monospace-Header in Orange, Border-Kollaps
+- `figure` → gerahmte Medienfläche mit dunklem Hintergrund
+- `figcaption` → Monospace-Caption mit `// ` Präfix
+
+### Pagination
+
+```
+.esse-pagination    CMS-Pagination im Cyber-Stil
+.pagination         Generische Pagination-Fallback-Klasse
+```
+
+Pagination-Links innerhalb von `.cyber-content-wrap` erhalten Mono-Font, eckige Akzent-Rahmen, Hover-State sowie aktive/deaktivierte Zustände.
 
 ### Footer
 
@@ -286,4 +302,4 @@ public function boot(): void
 public function renderPage(array $page, string $content): void
 ```
 
-Liest `site_name` und die Menü-Slugs aus Settings, lädt die Menü-Arrays per `Menu::get()` und includiert je nach `$page['error_code']` entweder `error.php` oder `layout.php`.
+Liest `site_name`, Theme-Menü-Slugs und `theme_esse-cyber_copyright` aus Settings, lädt die Menü-Arrays per `Menu::get()` und includiert je nach `$page['error_code']` entweder `error.php` oder `layout.php`.
