@@ -5,6 +5,13 @@ Format nach [Keep a Changelog](https://keepachangelog.com/de/0.2.0/), Versionier
 
 ---
 
+## [0.4.2] – 2026-06-04
+
+### Geändert
+- `esse-badge--warning/info/success/danger`: semantische Badges auf Cyber-Stil umgestellt — transparenter Hintergrund, farbiger Border und Text statt Bootstrap-Solid-Blöcke; greift global (auch außerhalb von `.cyber-content-wrap`)
+
+---
+
 ## [0.4.1] – 2026-06-04
 
 ### Geändert
