@@ -2,36 +2,57 @@
 
 Cyberpunk-Terminal-Theme für ESSE CMS. Dunkler Hintergrund mit orangem Akzent, Scanlines-Overlay, animiertem Grid-Hintergrund und Monospace-Typografie.
 
+[![Release](https://img.shields.io/github/v/release/nfsmw15/esse-cyber?label=release&color=blue)](https://github.com/nfsmw15/esse-cyber/releases)
+[![License](https://img.shields.io/badge/license-AGPL--3.0-green)](LICENSE)
+[![ESSE CMS](https://img.shields.io/badge/esse--cms-%3E%3D0.1.0-orange)](https://github.com/nfsmw15/esse-cms)
+
+## Überblick
+
+`esse-cyber` ist für öffentliche Content-Seiten gedacht — Portfolios, Projektseiten, kleine Blogs oder Community-Auftritte im Cyberpunk-Terminal-Look. Es bringt ein einziges, durchgängiges Layout für normale Seiten und Fehlerseiten mit:
+
+- fixierte Topbar mit Logo, Hauptnavigation (inkl. Dropdown), User-/Login-Menü und Status-Anzeige
+- Hintergrund-Ebenen mit Scanlines, animiertem Grid, Glow-Effekt und Eck-Dekorationen
+- zentrierter Content-Bereich mit Glasmorphism-Panel, Scroll-Fortschrittsbalken und automatisch formatierter Prosa
+- fixierter Footer als HUD-Balken mit Live-Uhr, konfigurierbarem Copyright und gruppierbarer Footer-Navigation
+- vollständige mobile Navigation als Fullscreen-Overlay mit Hamburger-Button und aufklappbaren Footer-Gruppen
+- ESSE-UI-Komponenten-Support für Plugin-Ausgaben
+
+Es gibt keinen Dashboard- oder Mitgliederbereich und keinen Light/Dark-Umschalter — das Theme ist bewusst auf einen einzigen, dunklen Cyberpunk-Stil zugeschnitten.
+
 ## Voraussetzungen
 
 - ESSE CMS mit aktivem Plugin-System
-- ESSE UI (wird über `/public/vendor/esse-ui/esse-ui.css` eingebunden)
+- ESSE UI: `/public/vendor/esse-ui/esse-ui.css`
 
 ## Installation
 
 Theme-Verzeichnis nach `themes/esse-cyber/` im ESSE-CMS-Root kopieren. Das Theme wird automatisch erkannt, sobald `theme.json` und `Theme.php` vorhanden sind.
 
-## Verzeichnisstruktur
-
+```text
+themes/
+└── esse-cyber/
+    ├── theme.json
+    ├── Theme.php
+    ├── README.md
+    ├── CHANGELOG.md
+    ├── LICENSE
+    ├── assets/
+    │   ├── css/
+    │   │   └── esse-cyber.css
+    │   └── fonts/
+    │       ├── rajdhani-400.woff2
+    │       ├── rajdhani-700.woff2
+    │       └── share-tech-mono.woff2
+    └── templates/
+        ├── layout.php
+        └── error.php
 ```
-esse-cyber/
-├── assets/
-│   ├── css/
-│   │   └── esse-cyber.css      # Gesamtes Stylesheet
-│   └── fonts/
-│       ├── rajdhani-400.woff2
-│       ├── rajdhani-700.woff2
-│       └── share-tech-mono.woff2
-├── templates/
-│   ├── layout.php              # Standard-Seiten-Layout
-│   └── error.php               # Fehlerseiten (404, 500 etc.)
-├── theme.json                  # Theme-Metadaten & Menü-Slots
-└── Theme.php                   # Boot-Logik, Hook-Registrierung
-```
 
-## Konfiguration
+Danach kann das Theme im ESSE-Admin unter **Themes** aktiviert werden.
 
-### theme.json
+## Manifest
+
+`theme.json`:
 
 ```json
 {
@@ -47,66 +68,78 @@ esse-cyber/
 }
 ```
 
-### Menü-Slots
+Wichtig für ESSE CMS:
 
-| Slot     | Beschreibung                                         |
-|----------|------------------------------------------------------|
-| `main`   | Topbar-Navigation (unterstützt ein Dropdown-Level)   |
-| `footer` | Footer-Links, gruppierbar mit Header-Einträgen       |
+- `name` muss dem Theme-Verzeichnis entsprechen: `esse-cyber`.
+- `class` muss auf die Theme-Klasse zeigen: `EsseCyber\Theme`.
+- Das GitHub-Repository muss für die CMS-Discovery das Topic `esse-theme` besitzen.
+- Veröffentlichte Versionen werden über GitHub Releases gefunden.
 
-Die Menü-Slugs werden über die CMS-Settings gespeichert:
-- `theme_esse-cyber_menu_main` → Slug des Hauptmenüs (Standard: `main`)
-- `theme_esse-cyber_menu_footer` → Slug des Footer-Menüs (Standard: `footer`)
-- `theme_esse-cyber_copyright` → Footer-Copyright-Text; unterstützt `{year}` und `{site}` (Standard: `© {year} {site}`)
+### Theme.php — Boot-Prozess
 
-## Design-Tokens (CSS Custom Properties)
+`boot()` lädt einmalig pro Request alle CMS-Settings in `$this->settings` und registriert `renderPage()` auf dem Hook `page.render`.
 
-Alle Farben und Schriften sind über Custom Properties definiert und können in Child-Styles überschrieben werden.
+`renderPage(array $page, string $content)`:
 
-| Variable    | Wert                       | Verwendung                       |
-|-------------|----------------------------|----------------------------------|
-| `--bg`      | `#050508`                  | Seitenhintergrund                |
-| `--surface` | `#0d0d14`                  | Karten, Dropdown-Hintergründe    |
-| `--border`  | `rgba(255,255,255,0.06)`   | Rahmenlinien                     |
-| `--accent`  | `#e8640a`                  | Akzentfarbe (Orange)             |
-| `--accent2` | `#ff9d45`                  | Hover-Akzent (helleres Orange)   |
-| `--text`    | `#e8e6e0`                  | Fließtext                        |
-| `--muted`   | `#9a9aa8`                  | Sekundärer Text, Metadaten       |
-| `--mono`    | `'Share Tech Mono', monospace` | Monospace-Schrift (UI-Labels) |
-| `--head`    | `'Rajdhani', sans-serif`   | Überschriften & Fließtext        |
+1. liest `site_name` sowie die Menü-Slugs (`theme_esse-cyber_menu_main` / `_footer`) aus den Settings
+2. baut `$copyrightText` aus dem Setting `theme_esse-cyber_copyright` auf — Platzhalter `{year}` und `{site}`, Fallback `© {Jahr} {Site-Name}` wenn das Setting leer ist
+3. lädt die Menü-Arrays per `Menu::get()`
+4. inkludiert je nach `$page['error_code']` entweder `templates/error.php` oder `templates/layout.php`
 
-Zusätzlich setzt das Theme die `--esse-*` Variablen für die CMS-UI-Komponenten (`esse-panel`, `esse-btn`, `esse-alert`, `esse-table`, `esse-tabs` usw.), damit Plugin-Ausgaben in der Cyber-Optik erscheinen.
+## Menüs
 
-## Schriften
+Das Theme deklariert zwei Menü-Slots.
 
-Alle Schriften werden lokal aus `assets/fonts/` geladen, kein CDN erforderlich.
+| Slot | Settings-Key | Fallback-Slug | Zweck |
+|---|---|---|---|
+| `main` | `theme_esse-cyber_menu_main` | `main` | Topbar-Hauptnavigation (unterstützt ein Dropdown-Level) |
+| `footer` | `theme_esse-cyber_menu_footer` | `footer` | Footer-Links, gruppierbar mit Header-Einträgen |
 
-| Schriftart       | Gewichte    | Verwendung           |
-|------------------|-------------|----------------------|
-| Rajdhani         | 400, 700    | Überschriften, Text; echte 700er Fettung für Headlines |
-| Share Tech Mono  | 400         | UI-Labels, Code      |
+Weitere Settings:
 
-## Templates
+| Settings-Key | Zweck |
+|---|---|
+| `theme_esse-cyber_copyright` | Copyright-Text-Vorlage mit Platzhaltern `{year}` und `{site}`; leer = Fallback `© {Jahr} {Site-Name}` |
+
+## Templates / Rendering-Logik
+
+Die Auswahl des Templates passiert in `Theme.php`.
+
+| Zustand | Template | Verhalten |
+|---|---|---|
+| `error_code` gesetzt | `templates/error.php` | Minimales Fehlerlayout (404, 403 …) ohne Navigation |
+| Normale Seite | `templates/layout.php` | Vollständiges Layout mit Topbar, Content und Footer |
 
 ### layout.php
 
-Vollständiges HTML-Dokument für normale Seiten. Erwartet folgende Variablen:
+Erwartet folgende Variablen:
 
-| Variable    | Typ                  | Beschreibung                          |
-|-------------|----------------------|---------------------------------------|
-| `$page`     | `array`              | Seiten-Daten aus dem CMS              |
-| `$content`  | `string`             | Gerendeter Seiteninhalt (HTML)        |
-| `$siteName` | `string`             | Name der Website                      |
-| `$mainMenu` | `array`              | Items des Hauptmenüs                  |
-| `$footMenu` | `array`              | Items des Footer-Menüs                |
-| `$copyrightText` | `string`       | Gerenderter Copyright-Text            |
-| `$theme`    | `\EsseCyber\Theme`   | Theme-Instanz (für `assetUrl()` etc.) |
+| Variable | Typ | Beschreibung |
+|---|---|---|
+| `$page` | `array` | Seiten-Daten aus dem CMS |
+| `$content` | `string` | Gerenderter Seiteninhalt (HTML) |
+| `$siteName` | `string` | Name der Website |
+| `$mainMenu` | `array` | Items des Hauptmenüs |
+| `$footMenu` | `array` | Items des Footer-Menüs |
+| `$copyrightText` | `string` | Fertig aufgelöster Copyright-Text (siehe Theme.php) |
+| `$theme` | `\EsseCyber\Theme` | Theme-Instanz (für `assetUrl()` etc.) |
 
 Aufbau:
-1. Fixierter Topbar mit Logo, Navigation, User-Menu und Status-Dot
-2. Hintergrund-Ebenen: `cyber-grid`, `cyber-glow`, vier `cyber-corner`-Dekors
+
+1. Skip-to-content-Link, Scroll-Fortschrittsbalken und Hintergrund-Ebenen (`cyber-grid`, `cyber-glow`, vier `cyber-corner`-Dekors)
+2. Fixierte Topbar mit Logo, Navigation, User-/Login-Menü, Status-Anzeige und Hamburger-Button
 3. `<main>` mit Seiten-Titel und `cyber-content-wrap`
-4. Fixierter Footer mit Live-Uhr und Footer-Navigation
+4. Fixierter Footer mit Live-Uhr, Copyright und Footer-Navigation
+
+Im `<head>` werden zusätzlich automatisch gesetzt:
+
+| Tag | Quelle |
+|---|---|
+| `og:title` | `$page['title'] // $siteName` |
+| `og:type` | `website` (fest) |
+| `og:url` | `HTTP_HOST` + `REQUEST_URI` |
+| `og:description` | `$page['description']` (nur wenn gesetzt) |
+| `meta[name=description]` | `$page['description']` (nur wenn gesetzt) |
 
 ### error.php
 
@@ -114,66 +147,119 @@ Minimales Layout für Fehlerseiten (ohne Navigation). Zeigt Fehlercode, Titel un
 
 Erwartet: `$page['error_code']`, `$page['error_title']`, `$page['error_message']`, `$siteName`, `$theme`.
 
-## CSS-Komponenten
+## Design-Tokens (CSS Custom Properties)
 
-### Topbar
+Alle Farben und Schriften sind über Custom Properties definiert und können in Child-Styles überschrieben werden.
 
-```
-.cyber-topbar       Fixierte Navigationsleiste oben
-.cyber-logo         Site-Logo-Link (Monospace, Orange)
-.cyber-nav          Navigations-Container (zentriert)
-.cyber-nav a        Navigationspunkt (Uppercase, Border-Separator)
-.cyber-nav a.active Aktiver Navigationspunkt
-```
+| Variable | Wert | Verwendung |
+|---|---|---|
+| `--bg` | `#050508` | Seitenhintergrund |
+| `--surface` | `#0d0d14` | Karten, Dropdown-Hintergründe |
+| `--border` | `rgba(255,255,255,0.06)` | Rahmenlinien |
+| `--accent` | `#e8640a` | Akzentfarbe (Orange) |
+| `--accent2` | `#ff9d45` | Hover-Akzent (helleres Orange) |
+| `--text` | `#e8e6e0` | Fließtext |
+| `--muted` | `#9a9aa8` | Sekundärer Text, Metadaten |
+| `--mono` | `'Share Tech Mono', monospace` | Monospace-Schrift (UI-Labels) |
+| `--head` | `'Rajdhani', sans-serif` | Überschriften & Fließtext |
 
-#### Dropdown (ein Level)
+Zusätzlich setzt das Theme die `--esse-*` Variablen für die CMS-UI-Komponenten (`esse-panel`, `esse-btn`, `esse-alert`, `esse-table`, `esse-tabs` usw.), damit Plugin-Ausgaben in der Cyber-Optik erscheinen.
+
+### Schriften
+
+Alle Schriften werden lokal aus `assets/fonts/` geladen, kein CDN erforderlich.
+
+| Schriftart | Gewichte | Verwendung |
+|---|---|---|
+| Rajdhani | 400, 700 | Überschriften, Fließtext, Akzent-Fettungen |
+| Share Tech Mono | 400 | UI-Labels, Code |
+
+## esse-grid Support
+
+Das Theme implementiert die verpflichtenden Grid-Klassen für Plugins:
 
 ```html
-<div class="cyber-dropdown">
-    <a href="/parent">Elternpunkt ▾</a>
-    <div class="cyber-dropdown-menu">
-        <a href="/child">Unterpunkt</a>
+<div class="esse-grid-wrap">
+    <div class="esse-grid" data-cols="3">
+        <div class="esse-grid-item">Inhalt</div>
+        <div class="esse-grid-item">Inhalt</div>
+        <div class="esse-grid-item">Inhalt</div>
     </div>
 </div>
 ```
 
-Das Dropdown öffnet sich per CSS-`:hover` und `:focus-within` ohne JavaScript.
+| `data-cols` | Spalten Desktop | Tablet (≤768px) | Mobil (≤480px) |
+|---|---|---|---|
+| `2` | 2 | 2 | 2 |
+| `3` | 3 | 2 | 2 |
+| `4` | 4 | 2 | 2 |
+| `6` | 6 | 3 | 2 |
+
+## ESSE-UI-Integration
+
+Das Theme lädt `/public/vendor/esse-ui/esse-ui.css` und überschreibt die `esse-*` Komponenten über `assets/css/esse-cyber.css`.
+
+```css
+.esse-panel,
+.esse-btn,
+.esse-alert,
+.esse-badge,
+.esse-table,
+.esse-tabs-btn,
+.esse-pagination,
+.esse-empty-state { ... }
+```
+
+Innerhalb von `.cyber-content-wrap` (gerenderter Seiteninhalt) erhalten alle gängigen esse-ui-Komponenten den vollen Cyber-Stil. Für Plugin-Seiten **außerhalb** des Content-Wrappers (z. B. eigene Plugin-Templates) gibt es globale Fallbacks für `.esse-btn--primary` und `.esse-table tbody tr:hover`, damit auch dort kein unstimmiger Bootstrap-Look durchscheint.
+
+Zusätzlich werden Bootstrap-Badge-Klassen (`badge.bg-*`/`text-bg-*`) sowie die Gallery-Plugin-Badges (`gal-badge-*`) auf den Cyber-Stil überschrieben, da einzelne Plugins noch eigene Badge-Markups ausgeben.
+
+## CSS-Komponenten
+
+### Topbar & Navigation
+
+```
+.cyber-topbar          Fixierte Navigationsleiste oben
+.cyber-logo            Site-Logo-Link (Monospace, Orange)
+.cyber-nav             Navigations-Container (zentriert; mobil: Fullscreen-Overlay)
+.cyber-nav a           Navigationspunkt (Uppercase, Border-Separator)
+.cyber-nav a.active    Aktiver Navigationspunkt
+.cyber-dropdown        Dropdown-Wrapper (ein Level, öffnet per :hover/:focus-within)
+.cyber-dropdown-toggle Mobiler Auf-/Zuklapp-Button für Dropdown-Untermenüs
+.cyber-menu-btn        Hamburger-Button (nur ≤768px sichtbar, .open animiert zu ✕)
+.cyber-nav-close       Schließen-Button innerhalb des Nav-Overlays
+.cyber-scroll-progress Fortschrittsbalken am oberen Rand (Scrollposition)
+```
+
+Auf mobilen Viewports (≤768px) wird `.cyber-nav` zu einem fullscreen-Overlay (`position: fixed`, `z-index: 490`). Dropdowns klappen über `.cyber-dropdown-toggle` inline auf statt als Hover-Menü. Schließt per `Escape`, ✕-Button oder Klick auf den Hintergrund.
+
+### User-Menu & Status
+
+```
+.cyber-actions      Wrapper für User-Menu und Status in der Topbar
+.cyber-user         Toggle-Button (Klick togglet .open)
+.cyber-user-label   Sichtbarer Beschriftungstext des Toggles
+.cyber-user-menu    Dropdown (sichtbar wenn .open / :focus-within)
+.cyber-forgot-link  „Passwort vergessen“-Link im Login-Dropdown
+.cyber-status       „ONLINE“-Label mit blinkendem Dot (mobil ausgeblendet)
+.cyber-status-dot   Grüner Dot (Blink-Animation, 2 s)
+```
+
+Das Menü öffnet/schließt sich per Klick oder Tastatur (`Enter`/Leertaste) auf `#cyber-user-toggle`. Klicks außerhalb schließen es; nach fehlgeschlagenem Navbar-Login bleibt es offen und fokussiert das Passwortfeld.
 
 ### Skip-to-content
 
 ```
 .cyber-skip-link    Visuell versteckt, bei :focus sichtbar (orangener Balken oben links)
-.cyber-scroll-progress  Fixe Lesefortschritts-Linie am oberen Viewport-Rand
 ```
 
-Springt zu `#cyber-main`. Taucht nur auf wenn per Tastatur navigiert wird.
-Die Scroll-Progress-Bar wird per JavaScript anhand der aktuellen Scroll-Position aktualisiert und beim Drucken ausgeblendet.
-
-### Mobile Navigation
-
-```
-.cyber-menu-btn     Hamburger-Button (nur ≤768px sichtbar, .open animiert zu ✕)
-.cyber-nav-close    Schließen-Button innerhalb des Nav-Overlays
-```
-
-Auf mobilen Viewports (≤768px) wird `.cyber-nav` zu einem fullscreen-Overlay (`position: fixed`, `width: 100vw`, `height: 100dvh`, `z-index: 490`). Dropdowns werden inline als zuklappbare Gruppen dargestellt und öffnen per Tap auf den Parent-Link. Schließt per `Escape`, ✕-Button oder Klick auf den Hintergrund.
-
-### User-Menu
-
-```
-.cyber-user         Toggle-Button (click-toggles .open)
-.cyber-user-label   Kürzbarer Text innerhalb des Toggle-Buttons
-.cyber-user-menu    Dropdown (sichtbar wenn .open gesetzt)
-```
-
-Das Menü öffnet und schließt sich per Click oder Tastatur (`Enter`/Leertaste) auf `#cyber-user-toggle`. Klicks außerhalb schließen es.
-Auf mobilen Viewports wird das Dropdown als fixes Panel unter der Topbar angezeigt, damit lange Button-Texte gekürzt werden können ohne das Login-Menü abzuschneiden.
+Springt zu `#cyber-main`. Erscheint nur bei Tastaturnavigation.
 
 ### Hintergrund-Effekte
 
 ```
 .cyber-grid         Fixes Raster-Muster (60×60 px, orange-transparent)
-.cyber-glow         Radialer Glow-Kreis oben, animiert (pulse 6s)
+.cyber-glow         Radialer Glow-Kreis oben, animiert (pulse 6 s)
 .cyber-corner       Eck-Dekorationen (tl/tr/bl/br)
 body::before        Scanlines-Overlay (repeating-linear-gradient)
 ```
@@ -181,13 +267,13 @@ body::before        Scanlines-Overlay (repeating-linear-gradient)
 ### Content-Bereich
 
 ```
-.cyber-main          Zentrierender Wrapper (min-height 100vh)
+.cyber-main          Zentrierender Wrapper (min-height 100vh; mobil aufgehoben)
 .cyber-page-title    Seiten-Titel (fügt '// ' vor dem Titel ein)
 .cyber-content-wrap  Panel mit Glasmorphism-Hintergrund, fadeUp-Animation
 .cyber-prose         Typografie-Wrapper für CMS-Inhalte
 ```
 
-### Prose-Stile (`cyber-prose`)
+#### Prose-Stile (`cyber-prose`)
 
 Formatiert CMS-Content automatisch:
 
@@ -196,31 +282,22 @@ Formatiert CMS-Content automatisch:
 - `pre` → Surface-Hintergrund, linker Akzentrahmen
 - `blockquote` → linker Akzentrahmen, gedämpfte Farbe
 - `table` → Monospace-Header in Orange, Border-Kollaps
-- `figure` → gerahmte Medienfläche mit dunklem Hintergrund
-- `figcaption` → Monospace-Caption mit `// ` Präfix
-
-### Pagination
-
-```
-.esse-pagination    CMS-Pagination im Cyber-Stil
-.pagination         Generische Pagination-Fallback-Klasse
-```
-
-Pagination-Links innerhalb von `.cyber-content-wrap` erhalten Mono-Font, eckige Akzent-Rahmen, Hover-State sowie aktive/deaktivierte Zustände.
+- `figure`/`figcaption` → gerahmte Medienfläche mit `// `-Präfix-Caption
 
 ### Footer
 
 ```
-.cyber-footer       Fixierter Footer unten
-.cyber-clock        Live-Uhr (#cyber-clock, per JS aktualisiert), links
-.cyber-copyright    Copyright-Hinweis, zentriert (© Jahr Site-Name)
-.cyber-footer-menu  Rechts verankerte Footer-Menügruppen im HUD-Balken
-.cyber-footer-heading  Gruppenüberschrift; nur mobil als Accordion-Toggle aktiv
-.cyber-footer-items    Linkgruppe; Desktop offen, mobil einklappbar
-.cyber-footer-link  Einzel-Link im Footer-Menü
+.cyber-footer        Fixierter Footer unten (mobil: statisch, gestapelt)
+.cyber-clock         Live-Uhr (#cyber-clock, per JS aktualisiert), links
+.cyber-copyright     Konfigurierbarer Copyright-Hinweis, zentriert
+.cyber-footer-menu   Rechts verankerte Footer-Menügruppen im HUD-Balken
+.cyber-footer-group  Einzelne Menügruppe
+.cyber-footer-heading Gruppenüberschrift (mobil: Akkordeon-Button)
+.cyber-footer-items  Linkliste einer Gruppe (mobil: ein-/ausklappbar)
+.cyber-footer-link   Einzel-Link im Footer-Menü
 ```
 
-Auf Desktop bleiben Footer-Gruppen vollständig offen. Auf mobilen Viewports (≤768px) werden sie als Accordion dargestellt: Überschriften sind aktivierbare Toggle-Buttons, Linkgruppen sind zunächst geschlossen und öffnen per Tap.
+Auf mobilen Viewports werden Footer-Gruppen zu Akkordeons: `.cyber-footer-heading` ist dort ein Button, der `.cyber-footer-items` ein-/ausklappt; auf dem Desktop bleibt alles permanent sichtbar.
 
 ### Buttons & Fehlerseite
 
@@ -233,73 +310,30 @@ Auf Desktop bleiben Footer-Gruppen vollständig offen. Auf mobilen Viewports (�
 .cyber-error-links  Link-Container (.cyber-btn)
 ```
 
-Nackte `input[type=submit]` und `button[type=submit]` innerhalb von `.cyber-content-wrap` erhalten ebenfalls den Cyber-Button-Stil. Das deckt CMS-Formulare wie das Profil ab, auch wenn sie keine `esse-btn` oder `cyber-btn` Klasse setzen.
+## Entwicklung / Deployment
 
-### Status-Anzeige
+PHP-Syntax prüfen:
 
-```
-.cyber-status       "ONLINE"-Label mit blinkendem Dot
-.cyber-status-dot   Grüner Dot (blink-Animation 2s)
-```
-
-## esse-grid Support
-
-Das Theme unterstützt das ESSE-Grid-System für mehrspaltige Layouts in CMS-Inhalten:
-
-```html
-<div class="esse-grid-wrap">
-    <div class="esse-grid" data-cols="3">
-        <div class="esse-grid-item">Inhalt</div>
-        <div class="esse-grid-item">Inhalt</div>
-        <div class="esse-grid-item">Inhalt</div>
-    </div>
-</div>
+```bash
+php -l Theme.php
+php -l templates/layout.php
+php -l templates/error.php
 ```
 
-| `data-cols` | Spalten Desktop | Tablet (≤768px) | Mobil (≤480px) ||-------------|-----------------|-----------------|-----------------|
-| `2`         | 2               | 2               | 2               |
-| `3`         | 3               | 2               | 2               |
-| `4`         | 4               | 2               | 2               |
-| `6`         | 6               | 3               | 2               |
+Für ein manuelles Deployment müssen mindestens diese Dateien übertragen werden, wenn Layout oder Styles geändert wurden:
 
-## ESSE-UI-Integration
-
-Das Theme lädt `/public/vendor/esse-ui/esse-ui.css` und überschreibt die `esse-*` Komponenten über `assets/css/esse-cyber.css`.
-
-```css
-.esse-panel,
-.esse-btn,
-.esse-alert,
-.esse-table,
-.esse-tabs-btn,
-.esse-empty-state { ... }
+```text
+assets/css/esse-cyber.css
+templates/layout.php
+templates/error.php
 ```
 
-Plugin-Ausgaben sollen die CMS-eigenen `esse-*` Klassen verwenden und werden dadurch im Cyber-Stil dargestellt.
+Der produktive Pfad hängt von der jeweiligen ESSE-CMS-Installation ab.
 
-## Open Graph
+## Changelog
 
-`layout.php` setzt automatisch im `<head>`:
+Siehe [CHANGELOG.md](CHANGELOG.md).
 
-| Tag | Quelle |
-|---|---|
-| `og:title` | `$page['title'] // $siteName` |
-| `og:type` | `website` (fest) |
-| `og:url` | `HTTP_HOST` + `REQUEST_URI` |
-| `og:description` | `$page['description']` (nur wenn gesetzt) |
-| `meta[name=description]` | `$page['description']` (nur wenn gesetzt) |
+## Lizenz
 
-## Theme.php — Boot-Prozess
-
-```php
-public function boot(): void
-```
-
-1. Lädt alle CMS-Settings aus der Datenbank in `$this->settings`
-2. Registriert `renderPage()` auf dem Hook `page.render`
-
-```php
-public function renderPage(array $page, string $content): void
-```
-
-Liest `site_name`, Theme-Menü-Slugs und `theme_esse-cyber_copyright` aus Settings, lädt die Menü-Arrays per `Menu::get()` und includiert je nach `$page['error_code']` entweder `error.php` oder `layout.php`.
+AGPL-3.0 — siehe [LICENSE](LICENSE).
