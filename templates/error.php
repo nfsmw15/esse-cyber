@@ -14,6 +14,7 @@ $message = $page['error_message'] ?? '';
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= $code ?> // <?= htmlspecialchars($siteName) ?></title>
+    <?= \Esse\Ui::iconPackCssTag() ?>
     <link rel="stylesheet" href="/public/vendor/esse-ui/esse-ui.css">
     <link rel="stylesheet" href="<?= $theme->assetUrl('css/esse-cyber.css') ?>">
 </head>
@@ -21,16 +22,17 @@ $message = $page['error_message'] ?? '';
 <div class="cyber-grid"></div>
 <div class="cyber-glow"></div>
 
-<main class="cyber-main" style="align-items:center">
+<main class="cyber-main cyber-error-main">
     <div class="cyber-error">
         <div class="cyber-error-code"><?= $code ?></div>
         <div class="cyber-error-title">// <?= htmlspecialchars(strtoupper($title)) ?></div>
         <div class="cyber-error-msg"><?= htmlspecialchars($message) ?></div>
         <div class="cyber-error-links">
             <a href="/" class="cyber-btn">// HOME</a>
-            <a href="javascript:history.back()" class="cyber-btn">// BACK</a>
+            <button type="button" class="cyber-btn" data-cyber-back>// BACK</button>
         </div>
     </div>
 </main>
+<script src="<?= $theme->assetUrl('js/esse-cyber.js') ?>"></script>
 </body>
 </html>

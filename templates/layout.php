@@ -6,10 +6,13 @@
  * @var array            $mainMenu
  * @var array            $footMenu
  * @var string           $copyrightText
+ * @var string           $extraBodyHtml
  * @var \EsseCyber\Theme  $theme
  */
 $currentSlug = $page['slug'] ?? '';
 $loginFailed = !empty($_GET['login_error']);
+$renderIcon = [$theme, 'renderIcon'];
+$extraBodyHtml = $extraBodyHtml ?? '';
 ?>
 <!DOCTYPE html>
 <html lang="de">
@@ -26,6 +29,7 @@ $loginFailed = !empty($_GET['login_error']);
     <?php if (!empty($page['description'])): ?>
     <meta property="og:description" content="<?= htmlspecialchars($page['description']) ?>">
     <?php endif ?>
+    <?= \Esse\Ui::iconPackCssTag() ?>
     <link rel="stylesheet" href="/public/vendor/esse-ui/esse-ui.css">
     <link rel="stylesheet" href="<?= $theme->assetUrl('css/esse-cyber.css') ?>">
 </head>
@@ -87,7 +91,7 @@ $loginFailed = !empty($_GET['login_error']);
 
     <div class="cyber-actions">
         <?php if (\Esse\Auth::check()): ?>
-        <div class="cyber-user" id="cyber-user-toggle" tabindex="0" onclick="event.stopPropagation();this.classList.toggle('open')" style="user-select:none">
+        <div class="cyber-user" id="cyber-user-toggle" tabindex="0" data-cyber-user-toggle>
             <span class="cyber-user-label">[ <?= htmlspecialchars(\Esse\Auth::user()['display_name'] ?? '') ?> ▾ ]</span>
             <div class="cyber-user-menu">
                 <a href="/profil">// Profil</a>
@@ -101,15 +105,15 @@ $loginFailed = !empty($_GET['login_error']);
             </div>
         </div>
         <?php else: ?>
-        <div class="cyber-user <?= $loginFailed ? 'open' : '' ?>" id="cyber-user-toggle" tabindex="0" onclick="event.stopPropagation();this.classList.toggle('open')" style="user-select:none">
+        <div class="cyber-user <?= $loginFailed ? 'open' : '' ?>" id="cyber-user-toggle" tabindex="0" data-cyber-user-toggle>
             <span class="cyber-user-label">[ Login ▾ ]</span>
-            <div class="cyber-user-menu" style="min-width:220px;padding:.75rem">
+            <div class="cyber-user-menu cyber-login-menu">
                 <?php if ($loginFailed): ?>
-                <div style="font-family:var(--mono);font-size:.8rem;color:#f87171;padding:.25rem .5rem .75rem;border-bottom:1px solid var(--border);margin-bottom:.5rem">
+                <div class="cyber-login-error">
                     // AUTH FAILED
                 </div>
                 <?php endif ?>
-                <form id="navbar-login-form" method="post" action="/admin/login" style="display:flex;flex-direction:column;gap:.5rem;padding:.25rem">
+                <form id="navbar-login-form" class="cyber-login-form" method="post" action="/admin/login" <?= $loginFailed ? 'data-cyber-login-failed' : '' ?>>
                     <input type="hidden" name="_csrf"    value="<?= \Esse\Auth::csrfToken() ?>">
                     <input type="hidden" name="redirect" value="<?= htmlspecialchars($_SERVER['REQUEST_URI'] ?? '/') ?>">
                     <input type="email" name="login" placeholder="E-MAIL"
@@ -117,12 +121,15 @@ $loginFailed = !empty($_GET['login_error']);
                     <input type="password" name="password" placeholder="PASSWORD"
                            autocomplete="current-password" required
                            <?= $loginFailed ? 'autofocus' : '' ?>>
-                    <button type="submit" class="cyber-btn" style="text-align:center;cursor:pointer;background:none">
+                    <button type="submit" class="cyber-btn cyber-login-submit">
                         // LOGIN
                     </button>
                 </form>
                 <a href="/admin/forgot-password" class="cyber-forgot-link">
                     forgot password
+                </a>
+                <a href="/login" class="cyber-forgot-link cyber-passkey-link">
+                    <?= $renderIcon('fingerprint') ?> Mit Passkey anmelden
                 </a>
             </div>
         </div>
@@ -140,10 +147,10 @@ $loginFailed = !empty($_GET['login_error']);
 
 <!-- Content -->
 <main class="cyber-main" id="cyber-main">
-    <div style="width:100%;max-width:860px">
+    <div class="cyber-main-inner">
         <?php if (!empty($page['title'])): ?>
         <h1 class="cyber-page-title">
-            <?php if (!empty($page['icon'])): ?><i class="<?= htmlspecialchars($page['icon']) ?>"></i><?php endif ?>
+            <?= $renderIcon($page['icon'] ?? null) ?>
             <?= htmlspecialchars($page['title']) ?>
         </h1>
         <?php endif ?>
@@ -203,124 +210,7 @@ $loginFailed = !empty($_GET['login_error']);
     <?php endif ?>
 </footer>
 
-<script>
-(function() {
-    function tick() {
-        const n = new Date(), p = n => String(n).padStart(2,'0');
-        document.getElementById('cyber-clock').textContent =
-            p(n.getHours())+':'+p(n.getMinutes())+':'+p(n.getSeconds());
-    }
-    tick();
-    setInterval(tick, 1000);
-
-    const scrollProgress = document.getElementById('cyber-scroll-progress');
-    function updateScrollProgress() {
-        if (!scrollProgress) return;
-        const max = document.documentElement.scrollHeight - window.innerHeight;
-        const progress = max > 0 ? Math.min(window.scrollY / max, 1) : 0;
-        scrollProgress.style.transform = 'scaleX(' + progress + ')';
-    }
-    updateScrollProgress();
-    document.addEventListener('scroll', updateScrollProgress, { passive: true });
-    window.addEventListener('resize', updateScrollProgress);
-
-    // Close user menu when clicking outside
-    document.addEventListener('click', function() {
-        document.getElementById('cyber-user-toggle')?.classList.remove('open');
-    });
-
-    // Prevent form clicks inside menu from closing it
-    document.querySelector('.cyber-user-menu')?.addEventListener('click', function(e) {
-        e.stopPropagation();
-    });
-
-    document.getElementById('cyber-user-toggle')?.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            this.classList.toggle('open');
-        }
-    });
-
-    // Mobile nav
-    const menuBtn = document.getElementById('cyber-menu-btn');
-    const nav     = document.getElementById('cyber-nav');
-    const navClose = document.getElementById('cyber-nav-close');
-    const mobileNav = window.matchMedia('(max-width: 768px)');
-
-    function openNav() {
-        nav.classList.add('open');
-        menuBtn.setAttribute('aria-expanded', 'true');
-        document.body.classList.add('nav-open');
-        navClose.focus();
-    }
-    function closeNav() {
-        nav.classList.remove('open');
-        nav.querySelectorAll('.cyber-dropdown.open').forEach(function(dropdown) {
-            dropdown.classList.remove('open');
-            dropdown.querySelector('.cyber-dropdown-toggle')?.setAttribute('aria-expanded', 'false');
-        });
-        menuBtn.setAttribute('aria-expanded', 'false');
-        document.body.classList.remove('nav-open');
-        menuBtn.focus();
-    }
-
-    menuBtn?.addEventListener('click', openNav);
-    navClose?.addEventListener('click', closeNav);
-    nav?.addEventListener('click', function(e) {
-        const dropdownToggle = e.target.closest('.cyber-dropdown-toggle');
-        if (!dropdownToggle || !nav.contains(dropdownToggle) || !mobileNav.matches) return;
-
-        e.preventDefault();
-        const dropdown = dropdownToggle.closest('.cyber-dropdown');
-        if (!dropdown) return;
-
-        dropdown.classList.toggle('open');
-        dropdownToggle.setAttribute('aria-expanded', dropdown.classList.contains('open') ? 'true' : 'false');
-    });
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && nav.classList.contains('open')) closeNav();
-    });
-
-    // Mobile footer accordions
-    const footerMenu = document.querySelector('.cyber-footer-menu');
-    const footerGroups = document.querySelectorAll('.cyber-footer-group');
-    const mobileFooter = window.matchMedia('(max-width: 768px)');
-
-    function syncFooterAccordions() {
-        footerGroups.forEach(function(group) {
-            const heading = group.querySelector('.cyber-footer-heading');
-            if (!heading) return;
-
-            if (!mobileFooter.matches) {
-                group.classList.remove('open');
-                heading.disabled = true;
-                heading.setAttribute('aria-expanded', 'true');
-                return;
-            }
-
-            heading.disabled = false;
-            heading.setAttribute('aria-expanded', group.classList.contains('open') ? 'true' : 'false');
-        });
-    }
-
-    footerMenu?.addEventListener('click', function(e) {
-        const heading = e.target.closest('.cyber-footer-heading');
-        if (!heading || !footerMenu.contains(heading) || !mobileFooter.matches) return;
-
-        e.preventDefault();
-        const group = heading.closest('.cyber-footer-group');
-        if (!group) return;
-
-        group.classList.toggle('open');
-        heading.setAttribute('aria-expanded', group.classList.contains('open') ? 'true' : 'false');
-    });
-    mobileFooter.addEventListener?.('change', syncFooterAccordions);
-    syncFooterAccordions();
-
-    <?php if ($loginFailed): ?>
-    document.querySelector('#navbar-login-form input[name="password"]')?.focus();
-    <?php endif ?>
-})();
-</script>
+<script src="<?= $theme->assetUrl('js/esse-cyber.js') ?>"></script>
+<?= $extraBodyHtml ?>
 </body>
 </html>

@@ -39,12 +39,18 @@ themes/
     ├── assets/
     │   ├── css/
     │   │   └── esse-cyber.css
+    │   ├── js/
+    │   │   └── esse-cyber.js
     │   └── fonts/
     │       ├── rajdhani-400.woff2
     │       ├── rajdhani-700.woff2
     │       └── share-tech-mono.woff2
     └── templates/
+        ├── forgot-password.php
         ├── layout.php
+        ├── login.php
+        ├── register.php
+        ├── reset-password.php
         └── error.php
 ```
 
@@ -57,7 +63,7 @@ Danach kann das Theme im ESSE-Admin unter **Themes** aktiviert werden.
 ```json
 {
     "name": "esse-cyber",
-    "version": "0.5.6",
+    "version": "0.6.0",
     "description": "Cyberpunk terminal theme with scanlines, grid background and orange accent.",
     "author": "ESSE CMS",
     "class": "EsseCyber\\Theme",
@@ -77,7 +83,7 @@ Wichtig für ESSE CMS:
 
 ### Theme.php — Boot-Prozess
 
-`boot()` lädt einmalig pro Request alle CMS-Settings in `$this->settings` und registriert `renderPage()` auf dem Hook `page.render`.
+`boot()` lädt einmalig pro Request alle CMS-Settings in `$this->settings` und registriert `renderPage()` auf dem Hook `page.render` sowie die Auth-Hooks `auth.login.render`, `auth.forgot_password.render`, `auth.reset_password.render` und `auth.register.render`.
 
 `renderPage(array $page, string $content)`:
 
@@ -85,6 +91,8 @@ Wichtig für ESSE CMS:
 2. baut `$copyrightText` aus dem Setting `theme_esse-cyber_copyright` auf — Platzhalter `{year}` und `{site}`, Fallback `© {Jahr} {Site-Name}` wenn das Setting leer ist
 3. lädt die Menü-Arrays per `Menu::get()`
 4. inkludiert je nach `$page['error_code']` entweder `templates/error.php` oder `templates/layout.php`
+
+Die Auth-Renderer bauen jeweils nur den Formular-Content und rendern ihn anschließend über das normale `templates/layout.php`. Die Auth-Logik bleibt im CMS-Core; das Theme gibt nur Formular, Links, Captcha-/Honeypot-Felder und den Core-Passkey-Block aus.
 
 ## Menüs
 
@@ -108,7 +116,13 @@ Die Auswahl des Templates passiert in `Theme.php`.
 | Zustand | Template | Verhalten |
 |---|---|---|
 | `error_code` gesetzt | `templates/error.php` | Minimales Fehlerlayout (404, 403 …) ohne Navigation |
+| `/login` über `auth.login.render` | `templates/login.php` im normalen Layout | Passwortformular, Passkey-Block und optionaler Registrieren-Link |
+| `/admin/forgot-password` | `templates/forgot-password.php` im normalen Layout | Reset-Link-Formular mit Captcha/Honeypot |
+| `/admin/reset-password` | `templates/reset-password.php` im normalen Layout | Neues-Passwort-Formular |
+| `/registrieren` über `auth.register.render` | `templates/register.php` im normalen Layout | Registrierungsformular mit Captcha/Honeypot |
 | Normale Seite | `templates/layout.php` | Vollständiges Layout mit Topbar, Content und Footer |
+
+Alle Templates sind CSP-kompatibel: keine Inline-Skripte, keine Inline-Eventhandler, keine `style`-Attribute. Theme-Interaktion liegt in `assets/js/esse-cyber.js`; der Passkey-Login nutzt die Core-Assets `/public/assets/js/webauthn.js` und `/public/assets/js/passkey-login.js`.
 
 ### layout.php
 
@@ -197,7 +211,7 @@ Das Theme implementiert die verpflichtenden Grid-Klassen für Plugins:
 
 ## ESSE-UI-Integration
 
-Das Theme lädt `/public/vendor/esse-ui/esse-ui.css` und überschreibt die `esse-*` Komponenten über `assets/css/esse-cyber.css`.
+Das Theme lädt `\Esse\Ui::iconPackCssTag()`, `/public/vendor/esse-ui/esse-ui.css` und danach `assets/css/esse-cyber.css`. Dadurch funktionieren pack-agnostische CMS-Icons und Plugin-Komponenten im Frontend.
 
 ```css
 .esse-panel,
@@ -318,14 +332,25 @@ PHP-Syntax prüfen:
 php -l Theme.php
 php -l templates/layout.php
 php -l templates/error.php
+php -l templates/login.php
+php -l templates/forgot-password.php
+php -l templates/reset-password.php
+php -l templates/register.php
+node --check assets/js/esse-cyber.js
 ```
 
-Für ein manuelles Deployment müssen mindestens diese Dateien übertragen werden, wenn Layout oder Styles geändert wurden:
+Für ein manuelles Deployment müssen mindestens diese Dateien übertragen werden, wenn Layout, Auth-Seiten oder Styles geändert wurden:
 
 ```text
+Theme.php
 assets/css/esse-cyber.css
+assets/js/esse-cyber.js
 templates/layout.php
 templates/error.php
+templates/login.php
+templates/forgot-password.php
+templates/reset-password.php
+templates/register.php
 ```
 
 Der produktive Pfad hängt von der jeweiligen ESSE-CMS-Installation ab.

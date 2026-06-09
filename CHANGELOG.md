@@ -1,7 +1,24 @@
 # Changelog
 
 Alle nennenswerten Änderungen an diesem Theme werden hier dokumentiert.  
-Format nach [Keep a Changelog](https://keepachangelog.com/de/0.2.0/), Versionierung nach [Semantic Versioning](https://semver.org/lang/de/).
+Format nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), Versionierung nach [Semantic Versioning](https://semver.org/lang/de/).
+
+---
+
+## [0.6.0] – 2026-06-09
+
+### Hinzugefügt
+- Theme-rendered `/login` über den CMS-Hook `auth.login.render`, inklusive Core-Passkey-Block für WebAuthn/Passkey-Anmeldung.
+- Theme-rendered `/admin/forgot-password`, `/admin/reset-password` und `/registrieren` über die neuen Auth-Hooks.
+- Externes Theme-JavaScript `assets/js/esse-cyber.js` für Uhr, Scroll-Progress, User-Menü, mobile Navigation, Footer-Accordions und Fehlerseiten-Zurück-Button.
+- Icon-Pack-CSS wird über `\Esse\Ui::iconPackCssTag()` in Layout-, Login- und Fehlerseiten geladen.
+
+### Geändert
+- `/login`, `/admin/forgot-password`, `/admin/reset-password` und `/registrieren` rendern im normalen Cyber-Layout mit Topbar, Navigation und Footer.
+- Login-Dropdown in der Topbar ist wieder einspaltig und verlinkt die Passkey-Anmeldung.
+- Templates sind CSP-kompatibel: Inline-Skripte, Inline-Eventhandler, `style`-Attribute und `javascript:`-Links wurden entfernt.
+- Honeypot-Felder auf Registrierung und Passwort-vergessen-Seite sind zuverlässig versteckt.
+- Page-Icons werden pack-agnostisch über `Theme::renderIcon()` gerendert und unterstützen weiterhin ältere volle CSS-Klassen.
 
 ---
 

@@ -128,6 +128,8 @@ body::before {
   transform-origin: left center;
 }
 
+.d-none { display: none !important; }
+
 /* Topbar */
 .cyber-topbar {
   position: fixed;
@@ -259,6 +261,7 @@ body::before {
   border: 1px solid rgba(232,100,10,0.3);
   padding: .25rem .75rem;
   transition: border-color .2s, color .2s;
+  user-select: none;
 }
 .cyber-user:hover { border-color: var(--accent); color: var(--accent); }
 .cyber-user-label { display: block; }
@@ -299,6 +302,35 @@ body::before {
 }
 .cyber-user-menu a:last-child,
 .cyber-user-menu button:last-child { border-bottom: none; }
+.cyber-login-menu {
+  min-width: 260px;
+  padding: .75rem;
+}
+.cyber-login-error {
+  border-bottom: 1px solid var(--border);
+  color: #f87171;
+  font-family: var(--mono);
+  font-size: .8rem;
+  margin-bottom: .5rem;
+  padding: .25rem .5rem .75rem;
+}
+.cyber-login-form {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  padding: .25rem;
+  width: 100%;
+}
+.cyber-login-form input {
+  display: block;
+  min-width: 0;
+  width: 100%;
+}
+.cyber-login-submit {
+  background: none;
+  cursor: pointer;
+  text-align: center;
+}
 .cyber-forgot-link {
   display: block;
   text-align: center;
@@ -311,6 +343,11 @@ body::before {
   transition: color .2s;
 }
 .cyber-forgot-link:hover { color: var(--accent); }
+.cyber-passkey-link {
+  border-top: 1px solid var(--border);
+  margin-top: .35rem;
+  padding-top: .7rem;
+}
 
 /* Hamburger button (mobile only) */
 .cyber-menu-btn {
@@ -364,6 +401,17 @@ body::before {
   padding: 5rem 1.5rem 10rem;
   display: flex;
   justify-content: center;
+}
+.cyber-main-inner {
+  max-width: 860px;
+  width: 100%;
+}
+.cyber-error-main {
+  align-items: center;
+}
+.cyber-login-main {
+  align-items: center;
+  min-height: 100vh;
 }
 
 .cyber-content-wrap {
@@ -996,6 +1044,9 @@ body::before {
 .cyber-error-msg { font-family: var(--mono); font-size: .85rem; color: var(--muted); }
 .cyber-error-links { display: flex; gap: 1rem; margin-top: .5rem; }
 .cyber-btn {
+  appearance: none;
+  -webkit-appearance: none;
+  background: none;
   font-family: var(--mono);
   font-size: .8rem;
   color: var(--accent);
@@ -1004,8 +1055,124 @@ body::before {
   padding: .5rem 1.25rem;
   letter-spacing: .08em;
   transition: background .2s, border-color .2s;
+  cursor: pointer;
 }
 .cyber-btn:hover { background: rgba(232,100,10,0.08); border-color: var(--accent); }
+
+/* Auth pages */
+.cyber-auth-panel {
+  margin: 0 auto;
+  max-width: 440px;
+}
+.cyber-auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: .7rem;
+  margin: 0 auto;
+  max-width: 520px;
+}
+.cyber-auth-submit {
+  margin-top: .35rem;
+  text-align: center;
+  width: 100%;
+}
+.cyber-alert {
+  border: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: .82rem;
+  letter-spacing: .04em;
+  margin-bottom: 1rem;
+  padding: .75rem 1rem;
+}
+.cyber-alert-danger {
+  border-color: rgba(248,113,113,0.45);
+  color: #f87171;
+}
+.cyber-alert-success {
+  border-color: rgba(34,197,94,0.45);
+  color: #86efac;
+}
+.cyber-alert-info {
+  border-color: rgba(56,189,248,0.45);
+  color: #7dd3fc;
+}
+.cyber-auth-copy,
+.cyber-form-hint {
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: .82rem;
+  letter-spacing: .04em;
+  line-height: 1.5;
+}
+.cyber-auth-copy {
+  margin: 0 auto 1rem;
+  max-width: 520px;
+}
+.cyber-auth-narrow {
+  max-width: 380px;
+}
+.cyber-form-hint {
+  margin-top: -.45rem;
+}
+.esse-honeypot {
+  display: none !important;
+}
+.cyber-passkey-block {
+  margin-top: 1rem;
+}
+.cyber-auth-separator {
+  align-items: center;
+  color: var(--muted);
+  display: flex;
+  font-family: var(--mono);
+  font-size: .75rem;
+  gap: .75rem;
+  letter-spacing: .08em;
+  margin: 1rem 0;
+}
+.cyber-auth-separator::before,
+.cyber-auth-separator::after {
+  background: var(--border);
+  content: '';
+  flex: 1;
+  height: 1px;
+}
+.cyber-passkey-error {
+  color: #f87171;
+  font-family: var(--mono);
+  font-size: .78rem;
+  margin-top: .75rem;
+}
+.cyber-auth-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem 1.25rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+.cyber-auth-links a,
+.cyber-auth-footer a {
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: .78rem;
+  letter-spacing: .05em;
+}
+.cyber-auth-links a:hover,
+.cyber-auth-footer a:hover {
+  color: var(--accent);
+}
+.cyber-auth-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+  text-align: center;
+}
+.cyber-auth-footer a {
+  display: block;
+  margin-top: .35rem;
+}
 
 /* Global form elements */
 label {
