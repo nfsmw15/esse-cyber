@@ -148,7 +148,7 @@ $extraBodyHtml = $extraBodyHtml ?? '';
 <!-- Content -->
 <main class="cyber-main" id="cyber-main">
     <div class="cyber-main-inner">
-        <?php if (!empty($page['title'])): ?>
+        <?php if (empty($page['hide_title']) && !empty($page['title'])): ?>
         <h1 class="cyber-page-title">
             <?= $renderIcon($page['icon'] ?? null) ?>
             <?= htmlspecialchars($page['title']) ?>

@@ -5,6 +5,12 @@ Format nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), Versionier
 
 ---
 
+## [Unreleased]
+
+### Hinzugefügt
+
+- Unterstützung für das neue `hide_title`-Feld aus dem ESSE-CMS-Seiteneditor: Ist die Option „Überschrift ausblenden" gesetzt, wird die `<h1>` mit Icon und Seitentitel (`templates/layout.php`) nicht gerendert.
+
 ## [0.6.0] – 2026-06-09
 
 ### Hinzugefügt
