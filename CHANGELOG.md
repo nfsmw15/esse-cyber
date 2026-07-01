@@ -5,7 +5,7 @@ Format nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), Versionier
 
 ---
 
-## [Unreleased]
+## [0.7.0] – 2026-07-02
 
 ### Hinzugefügt
 
@@ -18,6 +18,7 @@ Format nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), Versionier
 ### Geändert
 
 - `/admin/reset-password` und `/registrieren`: fest verdrahteter Hinweis „Mindestens 10 Zeichen" durch die konfigurierbare Live-Checkliste ersetzt, da die Passwort-Policy jetzt pro Installation einstellbar ist.
+- `/registrieren`: Erfolgstext nach der Registrierung verweist korrekt auf die ausstehende E-Mail-Bestätigung statt fälschlich „jetzt anmelden" zu suggerieren — Login schlägt bis zur Bestätigung ohnehin fehl.
 
 ## [0.6.0] – 2026-06-09
 
