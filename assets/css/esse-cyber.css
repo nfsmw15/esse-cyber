@@ -1114,6 +1114,33 @@ body::before {
 .cyber-form-hint {
   margin-top: -.45rem;
 }
+.cyber-pw-strength {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--mono);
+  font-size: .78rem;
+  gap: .2rem;
+  letter-spacing: .03em;
+  list-style: none;
+  margin: -.4rem 0 0;
+  padding: 0;
+}
+.cyber-pw-strength .pw-strength-mark {
+  display: inline-block;
+  width: 1.1em;
+}
+.cyber-field-checkbox {
+  align-items: center;
+  display: flex;
+  gap: .5rem;
+}
+.cyber-field-checkbox label {
+  display: inline;
+  margin-bottom: 0;
+}
+.cyber-required-mark {
+  color: var(--accent);
+}
 .esse-honeypot {
   display: none !important;
 }

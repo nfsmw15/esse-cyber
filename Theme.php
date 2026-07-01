@@ -23,6 +23,7 @@ class Theme extends \Esse\Theme
         Hooks::on('auth.forgot_password.render', [$this, 'renderForgotPassword']);
         Hooks::on('auth.reset_password.render', [$this, 'renderResetPassword']);
         Hooks::on('auth.register.render', [$this, 'renderRegister']);
+        Hooks::on('auth.verify_email.render', [$this, 'renderVerifyEmail']);
     }
 
     public function renderPage(array $page, string $content): void
@@ -85,6 +86,16 @@ class Theme extends \Esse\Theme
             'slug' => 'registrieren',
             'title' => 'Registrieren',
             'icon' => 'person-plus',
+        ], $content);
+    }
+
+    public function renderVerifyEmail(array $data): void
+    {
+        $content = $this->renderPartial('templates/verify-email.php', ['data' => $data]);
+        $this->renderContentPage([
+            'slug' => 'email-bestaetigen',
+            'title' => 'E-Mail bestätigen',
+            'icon' => 'envelope-check',
         ], $content);
     }
 

@@ -10,6 +10,14 @@ Format nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), Versionier
 ### Hinzugefügt
 
 - Unterstützung für das neue `hide_title`-Feld aus dem ESSE-CMS-Seiteneditor: Ist die Option „Überschrift ausblenden" gesetzt, wird die `<h1>` mit Icon und Seitentitel (`templates/layout.php`) nicht gerendert.
+- `/login`: Link „Neue Bestätigungs-Mail anfordern" im Fehlerblock, wenn der Hook `auth.login.render` ein `unverifiedEmail` liefert (E-Mail-Verifikation im Core).
+- `/admin/reset-password` und `/registrieren`: Live-Checkliste für Passwort-Anforderungen (Länge, Groß-/Kleinbuchstaben, Ziffer, Sonderzeichen, ggf. Zeichenfolgen) über das neue `pwPolicyCfg` aus `auth.reset_password.render` bzw. `auth.register.render`, ausgewertet von `/public/assets/js/password-strength.js` aus dem Core.
+- `/registrieren`: admin-konfigurierbare Zusatzfelder (`$data['customFields']`, Typen Text/Textarea/Select/Checkbox/Datum) werden jetzt gerendert und bei Validierungsfehlern aus `$data['formData']` vorbefüllt — bisher wurden sie vom Theme komplett ignoriert.
+- `/email-bestaetigen` wird jetzt über den neuen Core-Hook `auth.verify_email.render` im Theme-Design gerendert (`templates/verify-email.php`) — Token-Bestätigung, Freigabe-Hinweis und Resend-Formular mit Captcha/Honeypot. Bisher fiel diese Seite auf das Bootstrap-Standard-Rendering des Cores zurück.
+
+### Geändert
+
+- `/admin/reset-password` und `/registrieren`: fest verdrahteter Hinweis „Mindestens 10 Zeichen" durch die konfigurierbare Live-Checkliste ersetzt, da die Passwort-Policy jetzt pro Installation einstellbar ist.
 
 ## [0.6.0] – 2026-06-09
 

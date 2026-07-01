@@ -8,7 +8,12 @@
 $renderIcon = [$theme, 'renderIcon'];
 ?>
 <?php if (!empty($data['error'])): ?>
-<div class="cyber-alert cyber-alert-danger"><?= htmlspecialchars($data['error']) ?></div>
+<div class="cyber-alert cyber-alert-danger">
+    <?= htmlspecialchars($data['error']) ?>
+    <?php if (!empty($data['unverifiedEmail'])): ?>
+    <a href="/email-bestaetigen?email=<?= rawurlencode($data['unverifiedEmail']) ?>">Neue Bestätigungs-Mail anfordern</a>
+    <?php endif ?>
+</div>
 <?php endif ?>
 
 <div class="cyber-auth-panel">
